@@ -5,7 +5,12 @@ ZNP Actor
 |-------|-------|-------|-------------|
 | 1.0  | May 26th 2016 | Anh Le  | Initial release |
 
-This actor works with ZNP devices. It must conform `Actor Commons` (see more in `1.actor-system.md`)
+This actor works with ZNP devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
+
+# UID
+The actor's local UID is: `system/znp`
+
+# Mailboxes
 
 The actor uses following mailboxes
 

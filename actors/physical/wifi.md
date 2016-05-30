@@ -5,11 +5,13 @@ Wifi Actor
 |-------|-------|-------|-------------|
 | 1.0  | May 30th 2016 | Anh Le  | Initial release |
 
-This actor works with Wifi devices. It must conform `Actor Commons` (see more in `1.actor-system.md`)
+This actor works with Wifi devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
+# UID
+The actor's local UID is: `system/wifi`
 
-
-The actor uses following mailboxes
+# Mailboxes
+The actor uses following mailboxes:
 
 ## 1. Requests
 For serving requests from other actors
@@ -34,7 +36,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 	from, // wifi guid, added by Message Broker automatically
   request, // the original request here
   response: {
-    status: "status.actor.success or status.actor.failed",
+    status: "status.actor.wifi.{success, failed}",
     error: "describing errors if have any"
   }
 }

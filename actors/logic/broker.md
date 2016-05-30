@@ -1,4 +1,4 @@
-Guard
+Broker
 =================
 
 | Version | Date | Author | Description |
@@ -6,10 +6,14 @@ Guard
 | 1.0  | May 28th 2016 | Anh Le  | Initial release |
 
 
-This actor acts as a guard, being responsible for ACL controls
+This actor acts as a broker, being responsible for managing connections to our system bus
 
-It must conform `Actor Commons` (see more in `1.actor-system.md`)
+It must conform `Actor Commons` (see more in `../actor-system.md`)
 
+# A. UID
+The actor's local UID is: `system/broker`
+
+# B. Mailboxes
 The actor uses following mailboxes
 
 **Security note**
@@ -48,7 +52,8 @@ Upon finishing these requests, it should send a response to the sender's `/respo
 ```
 **note**
 - If there's any actor with such account, it will be overridden.
-- System actor can NOT be deleted once created. It can be deleted by using db commands via cli.
+- System actor can NOT be deleted once created. It can be deleted by using db commands via CLI.
+
 #### 1.1.2 Get all users
 **mailbox:** `request/actors/get_all`
 

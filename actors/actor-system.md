@@ -8,10 +8,10 @@ Actor System
 
 ## 1. Actors
 ### 1.1 Overview
-Actors are programming concepts to model entities communicate via messages.
+Actors are programming concepts to model entities communicating via messages.
 + Can be implemented in any programming language
 + Have their own mailboxes which are authorized topics on a message broker.
-+ Can be featured by a uid
++ Can be featured by a uid (locally or globally)
 
 ### 1.2 Mailboxes
 A mailbox (a topic) can be configured to subscribe or publish to a specific set of actors.
@@ -199,7 +199,6 @@ Actor system contains 3 layers and boot in order
 - Bridge: connect to the cloud (if feasible)
 - Analytics
 - Logger
-- Guard: Authentication, uid/token grant/remove
 - Housekeeper
 
 **Driver service actor**
