@@ -11,7 +11,7 @@ This actor acts as a broker, being responsible for managing connections to our s
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system/broker`
+The actor's local UID is: `system_broker`
 
 # B. Mailboxes
 The actor uses following mailboxes

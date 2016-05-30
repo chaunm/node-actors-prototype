@@ -133,7 +133,7 @@ Upon finishing these requests, it should send a response to the sender's `/respo
 		description: "string",
 		version: "string",
 		developer: "string",
-		release: "release date"
+		released: "release date"
 	}
 }
 ```
