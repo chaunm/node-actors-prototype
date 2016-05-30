@@ -89,6 +89,7 @@ This mailbox contains response from other actors
 	from, // znp's guid, added by Message Broker automatically
   macId,
   endpoint,
+  // device.sensor.{motion, humidity, door, smoke}, device.keyfob.{panic, remote}
   deviceClass,
   protocol: "zigbee"
 }
@@ -132,6 +133,38 @@ This mailbox contains response from other actors
   macId,
   endpoint,
   protocol: "zigbee",
-  payload //json object
+  payload: { //json object
+
+    // motion sensor
+    motion: 0 or 1, // 0 -> no motion
+    battery: 0 or 1, // 1 -> battery ok, 0 -> battery low
+
+    // door sensor
+    open: 0 or 1, // 0 -> closed, 1 -> opened
+    battery: 0 or 1,    
+
+    // temperature sensor
+    temperature: 32.7, // celsius degree
+    battery: 0 or 1,    
+
+    // humidity sensor
+    humidity: 32, // percentage
+    battery: 0 or 1,    
+
+    // smoke sensor
+    smoke: 0 or 1, // 1 -> smoke detected
+    battery: 0 or 1,    
+
+    // panic button
+    panic: 0 or 1, // 1 -> panic, on event only
+    battery: 0 or 1,    // recheck if we can check this information    
+
+    // remote button
+    remote: 'arm'
+        | 'disarm'
+        | 'indoor'
+        | 'suppress', // suppress any alarm
+    battery: 0 or 1,    // recheck if we can check this information        
+  }
 }
 ```
