@@ -94,7 +94,7 @@ This mailbox contains response from other actors
 	from, // znp's guid, added by Message Broker automatically
   macId,
   endpoint,
-  // device.sensor.{motion, humidity, door, smoke}, device.keyfob.{panic, remote}
+  // class.device.sensor.{motion, humidity, door, smoke}, class.device.keyfob.{panic, remote}
   deviceClass,
   protocol: "zigbee"
 }
@@ -138,7 +138,7 @@ This mailbox contains response from other actors
   macId,
   endpoint,
   protocol: "zigbee",
-  payload: { //json object
+  data: { //json object
 
     // motion sensor
     motion: 0 or 1, // 0 -> no motion

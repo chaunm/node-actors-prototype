@@ -1,28 +1,29 @@
 Data structures
 =====
+**Table Service**
+- uid: also the mailbox uid/request/#, uid/response, uid/event/#
+- name
+- description
+- version
+- status: status.service.{ online, offline, error }
+- developer
 
-## Zigbee Device Data
-- protocol (Zigbee)
-- uid & token
-- mac id
-- endpoint
+**Table Device**
+- uid = hash256(macid :: endpoint, for zigbee)
 - name
 - location
-- time-series data {key-value}
+- protocol (Zigbee)
+- mac id
+- endpoint
+- class: class.device.*
+- status: status.device.{ online, offline, error }
+- data (current)
+- lastUpdate
 
+**Table DataSeries**
+- deviceId
+- data
+- timestamp
 
-
-Two approaches:
-
-## 1. Store in an event DB like RethinkDB
-```javascript
-```
-
-
-## 2. Mailboxes + TSDB
-```javascript
-// device/macid/endpoint
-```
-
-## 3. Housekeeper API
-### 3.1 Get devices
+**Table Actors**
+- uid

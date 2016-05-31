@@ -124,7 +124,7 @@ Upon finishing these requests, it should send a response to the sender's `/respo
 
 ```javascript
 {
-	from, // wifi guid, added by Message Broker automatically
+	from, // guid, added by Message Broker automatically
   request, // the original request here
 	response: {
 		status: "status.actor.{success,failed}",
