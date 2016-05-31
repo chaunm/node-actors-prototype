@@ -18,7 +18,7 @@ Data structures
 - class: class.device.*
 - status: status.device.{ online, offline, error }
 - data (current)
-- lastUpdate
+- updated
 
 **Table DataSeries**
 - deviceId

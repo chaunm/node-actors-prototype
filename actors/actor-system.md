@@ -81,7 +81,16 @@ Actor Wifi can emit `connected` events to `event/connected`:
 This section defines a common interface about what Actors must conform in our Actor System
 
 ### 2.1  General
-- Must securely maintain their uid & tokens which are used to connect to our brokers
+- External actors must securely maintain their IDs & tokens (their credentials) which are used to connect to our brokers
+- Internal actors must securely maintain their credentials if provided. If they're provided with new credentials during activation period, they must use it.
+```js
+// activation period: time at which the actor is activated by System
+// may be via command
+// $ ./dummy_actor --id <provided id> --token <provided token>
+
+// may be via programming language (nodejs)
+var DummyActor = new Actor({id, token});
+```
 
 - Must conform `Actor life cycle`
 
