@@ -28,8 +28,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically.
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   xxx
 }
@@ -45,7 +48,10 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically.
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
 
   xxx,
 

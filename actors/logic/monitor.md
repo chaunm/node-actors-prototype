@@ -27,8 +27,12 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically.
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
 
   params: {
     uid // uid of the actor to check
@@ -39,7 +43,12 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   request, // the original request here
   response: {
     online: {true, false}
@@ -48,7 +57,7 @@ The actor uses following mailboxes
 ```
 
 ## 2. Response
-
+No response to receive
 
 ## 3. Event
 No event emitted

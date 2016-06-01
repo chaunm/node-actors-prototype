@@ -28,8 +28,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   params: {
     account,
@@ -43,7 +46,12 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -63,8 +71,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  }
 }
 ```
 
@@ -72,7 +83,12 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -90,8 +106,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   params: {
     account
@@ -103,7 +122,11 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -119,8 +142,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   params: {
     account
@@ -132,7 +158,11 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -153,8 +183,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   actor, // guid of the actor to grant
   actions: [ // list of activity & target
@@ -171,7 +204,11 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -201,8 +238,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   target: "system/#"
 }
@@ -212,7 +252,11 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -241,8 +285,12 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   params: {
     actor, // guid of the actor
   }
@@ -253,7 +301,11 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -278,8 +330,12 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically. Only accepts 'housekeeper'
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   params: {
     actor, // guid of the actor
   }
@@ -290,7 +346,10 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
   request, // the original request here
   response: {
     status: "status.{success,failed}",

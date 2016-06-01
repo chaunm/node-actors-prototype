@@ -26,8 +26,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically.
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   params: {
     // any key value ...
@@ -45,8 +48,11 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically.
-  id, // generated & maintained by the sender (for callbacks)
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
 
   params: {
     // any key value ...
@@ -58,7 +64,10 @@ The actor uses following mailboxes
 
 ```js
 {
-    from, // the guard's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -78,12 +87,14 @@ The actor uses following mailboxes
 
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically.
-
-  data: {
-    // any key value ...
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
   },
 
-  updated: "last time the data updated"
+  params: {
+    // any key value ...
+  },
 }
 ```

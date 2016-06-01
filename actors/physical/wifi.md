@@ -24,7 +24,12 @@ For serving requests from other actors
 **message:**
 ```javascript
 {
-	from, // sender's guid, added by Message Broker automatically  
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   params: {
     id, // generated & maintained by the actor (for callbacks)
     ssid: "string",
@@ -37,7 +42,11 @@ For serving requests from other actors
 Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
 ```js
 {
-	from, // wifi guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
   request, // the original request here
   response: {
     status: "status.{success,failed}",
@@ -53,7 +62,12 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 **message:**
 ```javascript
 {
-  from, // sender's guid, added by Message Broker automatically  
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   params: {
     id, // generated & maintained by the actor (for callbacks)
     ssid: "string",
@@ -83,7 +97,12 @@ This mailbox contains response from other actors
 **message:**  messages should conform the format:
 ```js
 {
-	from, // sender's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
   request, // the original request here
   response: {
     // any key-value
@@ -99,8 +118,14 @@ This mailbox contains response from other actors
 **message**: messages should conform the format
 ```js
 {
-	from, // wifi's guid, added by Message Broker automatically
-  ssid
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    ssid
+  }
 }
 ```
 
@@ -111,7 +136,13 @@ This mailbox contains response from other actors
 **message**: messages should conform the format
 ```js
 {
-	from, // znp's guid, added by Message Broker automatically
-  ssid // previously connected ssid
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    ssid // previously connected ssid
+  }
 }
 ```
