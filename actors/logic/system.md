@@ -1,9 +1,11 @@
 System
-=================
+===================
 
-| Version | Date | Author | Description |
-|-------|-------|-------|-------------|
-| 1.0  | May 31th 2016 | Anh Le  | Initial release |
+Version | Date          | Author | Description
+------- | ------------- | ------ | ---------------
+1.0     | May 31th 2016 | Anh Le | Initial release
+
+# Overview
 
 This actor acts as the core system, being responsible for:
 - monitor actors status (optionally their communications, dead messages... )
@@ -18,45 +20,26 @@ The actor's local UID is: `system`
 The actor uses following mailboxes
 
 ## 1. Requests
-#### 1.1 Setup
-- Set the actor up with necessary information
-- Only actor `system` can invoke this request.
+### 1.1 xxx
 
-**mailbox:** `request/setup`
+**mailbox:** `request/xxx`
+
 **message:**
+
 ```javascript
 {
   from, // sender's guid, added by Message Broker automatically.
   id, // generated & maintained by the sender (for callbacks)
 
-  setup: {
-    // any key value ...
-  }
-}
-```
-### 1.2 Update data
-- Update data.
-- Only actor `system` can invoke this request.
-
-**mailbox:** `request/update`
-**message:**
-```javascript
-{
-  from, // sender's guid, added by Message Broker automatically.
-  id, // generated & maintained by the sender (for callbacks)
-
-  update: {
-    // any key value ...
-  }
+  xxx
 }
 ```
 
 ## 2. Response
-- Devices don't make any request. So they don't process response
 
 ## 3. Event
-### 3.1 Data
-**mailbox:** `event/data`
+### 3.1 xxx
+**mailbox:** `event/xxx`
 
 **message:** This is a retained message
 
@@ -64,9 +47,7 @@ The actor uses following mailboxes
 {
   from, // sender's guid, added by Message Broker automatically.
 
-  data: {
-    // any key value ...
-  },
+  xxx,
 
   updated: "last time the data updated"
 }

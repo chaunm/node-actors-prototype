@@ -5,6 +5,8 @@ Wifi Actor
 |-------|-------|-------|-------------|
 | 1.0  | May 30th 2016 | Anh Le  | Initial release |
 
+# Overview
+
 This actor works with Wifi devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # UID
@@ -23,9 +25,11 @@ For serving requests from other actors
 ```javascript
 {
 	from, // sender's guid, added by Message Broker automatically  
-  id, // generated & maintained by the actor (for callbacks)
-  ssid: "string",
-  password: ""
+  params: {
+    id, // generated & maintained by the actor (for callbacks)
+    ssid: "string",
+    password: ""
+  }
 }
 ```
 
@@ -36,7 +40,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 	from, // wifi guid, added by Message Broker automatically
   request, // the original request here
   response: {
-    status: "status.actor.wifi.{success, failed}",
+    status: "status.{success,failed}",
     error: "describing errors if have any"
   }
 }
@@ -50,9 +54,11 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ```javascript
 {
   from, // sender's guid, added by Message Broker automatically  
-  id, // generated & maintained by the actor (for callbacks)
-  ssid: "string",
-  password: ""  
+  params: {
+    id, // generated & maintained by the actor (for callbacks)
+    ssid: "string",
+    password: ""  
+  }
 }
 ```
 
@@ -63,7 +69,8 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 	from, // znp's guid, added by Message Broker automatically
   request, // the original request here
   response: {
-    status: "status.actor.wifi.{success, failed, or anything else}",
+    status: "status.{success,failed}",
+    error: "describing errors if have any"    
   }
 }
 ```

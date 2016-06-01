@@ -1,12 +1,12 @@
 Device
-=================
+===================
 
-| Version | Date | Author | Description |
-|-------|-------|-------|-------------|
-| 1.0  | May 31th 2016 | Anh Le  | Initial release |
+Version | Date          | Author | Description
+------- | ------------- | ------ | ---------------
+1.0     | May 31th 2016 | Anh Le | Initial release
 
+# Overview
 This actor acts as a device
-
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
@@ -16,35 +16,53 @@ The actor's local UID is: `system_device_<id>`
 The actor uses following mailboxes
 
 ## 1. Requests
-#### 1.1 Setup
+### 1.1 Setup
 - Set the actor up with necessary information
 - Only actor `system` can invoke this request.
 
 **mailbox:** `request/setup`
+
 **message:**
+
 ```javascript
 {
   from, // sender's guid, added by Message Broker automatically.
   id, // generated & maintained by the sender (for callbacks)
 
-  setup: {
+  params: {
     // any key value ...
   }
 }
 ```
+
 ### 1.2 Update data
 - Update data.
 - Only actor `system` can invoke this request.
 
 **mailbox:** `request/update`
+
 **message:**
+
 ```javascript
 {
   from, // sender's guid, added by Message Broker automatically.
   id, // generated & maintained by the sender (for callbacks)
 
-  update: {
+  params: {
     // any key value ...
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+
+```js
+{
+    from, // the guard's guid, added by Message Broker automatically
+  request, // the original request here
+  response: {
+    status: "status.{success,failed}",
+    error: "describing errors if have any"
   }
 }
 ```

@@ -1,12 +1,13 @@
 Data structures
 =====
+
 **Table Service**
 - uid: also the mailbox uid/request/#, uid/response, uid/event/#
 - name
 - description
 - version
-- status: status.service.{ online, offline, error }
 - developer
+- status: status.{stopped, starting, started, stopping, error}
 
 **Table Device**
 - uid = hash256(macid :: endpoint, for zigbee)
@@ -16,9 +17,9 @@ Data structures
 - mac id
 - endpoint
 - class: class.device.*
-- status: status.device.{ online, offline, error }
 - data (current)
 - updated
+- status: status.{stopped, starting, started, stopping, error}
 
 **Table DataSeries**
 - deviceId

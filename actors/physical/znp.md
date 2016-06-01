@@ -5,6 +5,8 @@ ZNP Actor
 |-------|-------|-------|-------------|
 | 1.0  | May 26th 2016 | Anh Le  | Initial release |
 
+# Overview
+
 This actor works with ZNP devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # UID
@@ -25,7 +27,9 @@ For serving requests from other actors
 {
 	from, // sender's guid, added by Message Broker automatically  
   id, // generated & maintained by the actor (for callbacks)
-  duration: <int, time in seconds>
+  params: {
+    duration: <int, time in seconds>
+  }
 }
 ```
 
@@ -36,7 +40,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 	from, // znp's guid, added by Message Broker automatically
   request, // the original request here
   response: {
-    status: "status.actor.success or status.actor.failed",
+    status: "status.{success,failed}",
     error: "describing errors if have any"
   }
 }
@@ -49,8 +53,11 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 **message:**
 ```javascript
 {
+	from, // znp's guid, added by Message Broker automatically  
   id, // generated & maintained by the actor (for callbacks)  
-  deviceId: <string>
+  params :{
+    deviceId: <string>
+  }
 }
 ```
 
@@ -61,7 +68,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 	from, // znp's guid, added by Message Broker automatically
   request, // the original request here
   response: {
-    status: "status.actor.success or status.actor.failed",
+    status: "status.{success,failed}",
     error: "error.actor.code" // code describing the error (if any)
   }
 }
@@ -78,6 +85,7 @@ This mailbox contains response from other actors
 	from, // sender's guid, added by Message Broker automatically
   request, // the original request here
   response: {
+    status: "status.{success,failed}",
     // any key-value
   }
 }

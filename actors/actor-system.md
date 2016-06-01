@@ -83,6 +83,7 @@ This section defines a common interface about what Actors must conform in our Ac
 ### 2.1  General
 - External actors must securely maintain their IDs & tokens (their credentials) which are used to connect to our brokers
 - Internal actors must securely maintain their credentials if provided. If they're provided with new credentials during activation period, they must use it.
+
 ```js
 // activation period: time at which the actor is activated by System
 // may be via command
@@ -90,15 +91,6 @@ This section defines a common interface about what Actors must conform in our Ac
 
 // may be via programming language (nodejs)
 var DummyActor = new Actor({id, token});
-```
-
-- Must conform `Actor life cycle`
-
-```text
-`stopped` -> `starting` -> `started` -> `stopping` --> `stopped` ...
-									 -> 'stopped' (if error)
-						-> `stopped` (if error)
-
 ```
 
 ### 2.2 Response
@@ -113,12 +105,23 @@ Any response must contain the original request. For example:
 ```
 
 ### 2.3 Requests
-Must response to special requests
+- Messages containing parameters passed to requests must have the format:
+```js
+{
+	from, // sender's guid, added by Message Broker automatically  
+  id, // generated & maintained by the actor (for callbacks)
+	params: {
+		// any key-value
+	}
+}
+```
+
+- Must response to special requests
 
 #### 2.3.1 Intro
 **Purpose** Get meta data about the actor
 
-**mailbox** `request/intro`
+**mailbox** `request/hello`
 
 **message:**
 ```javascript
@@ -136,13 +139,16 @@ Upon finishing these requests, it should send a response to the sender's `/respo
 	from, // guid, added by Message Broker automatically
   request, // the original request here
 	response: {
-		status: "status.actor.{success,failed}",
+		status: "status.{success,failed}",
 		uid: "string",
 		name: "string",
 		description: "string",
 		version: "string",
 		developer: "string",
-		released: "release date"
+		released: "release date",
+		configuration: {
+			ttl: "2d" // default 5m => ttl must be a mutiple of 60s
+		}
 	}
 }
 ```
@@ -168,24 +174,30 @@ Upon finishing these requests, it should send a response to the sender's `/respo
 	from, // wifi guid, added by Message Broker automatically
   request, // the original request here
   response: {
-    status: "status.actor.{success,failed}",
+    status: "status.{success,failed}",
   }
 }
 ```
 
 ### 2.4 Events
-- Periodically emit `status event` via `event/status` (every 5s).
+```text
+`stopped` -> `starting` -> `started` -> `stopping` --> `stopped` ...
+									 -> 'stopped' (if error)
+						-> `stopped` (if error)
+
+```
+
+- Periodically emit `status event` via `event/status` (every 5s) (retained message)
 For example:
 
 ```javascript
 {
 	from, // uid of the emitter, added by Message Broker automatically
-	event: "event.actor.{stopped, starting, started, stopping}",
-	error: "describing error (optionally if there is any)"
+	timestamp, // int, updated time in  Unix epoch time format, added by Message Broker automatically
+	status: "status.{stopped, starting, started, stopping, error}",
+	error: "describing error (optionally if there is any)",
 }
 ```
-
-
 
 ## 3. Actor System
 Actor system contains 3 layers and boot in order
