@@ -48,7 +48,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
   },
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any"
   }
 }
@@ -85,7 +85,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "error.actor.code" // code describing the error (if any)
   }
 }
@@ -107,7 +107,7 @@ This mailbox contains response from other actors
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     // any key-value
   }
 }

@@ -70,7 +70,7 @@ The actor uses following mailboxes
   },
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any"
   }
 }

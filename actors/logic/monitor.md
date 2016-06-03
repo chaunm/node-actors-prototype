@@ -51,6 +51,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
+    status: "status.{success, failure.*}",
     online: {true, false}
   }
 }

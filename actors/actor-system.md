@@ -137,10 +137,10 @@ Any response must contain the original request. For example:
 
 - Must response to special requests
 
-#### 2.3.1 Intro
+#### 2.3.1 Meta
 **Purpose** Get meta data about the actor
 
-**mailbox** `request/hello`
+**mailbox** `request/meta`
 
 **message:**
 ```javascript
@@ -165,8 +165,7 @@ Upon finishing these requests, it should send a response to the sender's `/respo
   },
   request, // the original request here
 	response: {
-		status: "status.{success,failed}",
-		uid: "string",
+    status: "status.{success, failure.*}",
 		name: "string",
 		description: "string",
 		version: "string",
@@ -192,6 +191,9 @@ Upon finishing these requests, it should send a response to the sender's `/respo
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  params: {
+    reason: "The reason why you want to stop the actor"
+  }
 }
 ```
 
@@ -207,7 +209,7 @@ Upon finishing these requests, it should send a response to the sender's `/respo
   },
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
   }
 }
 ```
@@ -231,7 +233,6 @@ For example:
     timestamp
   },
   params: {
-    timestamp, // int, updated time in  Unix epoch time format, added by Message Broker automatically
     status: "status.{stopped, starting, started, stopping, error}",
     error: "describing error (optionally if there is any)",
   }

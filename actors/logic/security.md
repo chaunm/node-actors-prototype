@@ -54,7 +54,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any"
   }
 }
@@ -91,7 +91,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     actors: [
       // list of user accounts (without passwords)
     ]
@@ -129,7 +129,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any"    
   }
 }
@@ -165,7 +165,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any"    
   }
 }
@@ -211,7 +211,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any"
   }
 }
@@ -259,7 +259,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any",
     grants:[
       {
@@ -308,7 +308,7 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     grant: {
       actor, // guid of the actor to grant
       actions: [ // list of activity & target
@@ -352,7 +352,7 @@ The actor uses following mailboxes
   },
   request, // the original request here
   response: {
-    status: "status.{success,failed}",
+    status: "status.{success, failure.*}",
     error: "describing errors if have any"
   }
 }
