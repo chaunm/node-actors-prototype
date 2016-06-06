@@ -18,7 +18,10 @@ A mailbox (a topic) can be configured to subscribe or publish to a specific set 
 + Each mailbox has its own URIs
 + URIs can be organized into APIs. For example `<uid>/request/add_device`
 
-An actor can operate only on 3 kind of mailboxes which are:
+#### 1.2.1 Owned mailboxes
+Mailbox ownership can be defined as: if an actor is defined a uid 'A', then any mailbox `A/#` will be considered to be owned by the actor.
+
+An actor owns 3 kind of mailboxes which are:
 
 **Request mailboxes:**
 + URIs: `<uid>/request/#`
@@ -36,6 +39,12 @@ An actor can operate only on 3 kind of mailboxes which are:
 + to store events emitted by the actor
 + Only the owning actor can publish to
 + Only authorized actors can subscribe to
+
+#### 1.2.2 Interactions
+if properly configured, actors can:
+- Subscribe to their own `Request` & `Response` mailboxes
+- Publish messages to their own `Event` mailboxes
+- Publish messages to `Request` & `Response` mailboxes of other actors
 
 ### 1.3 Messages
 Interchanged messages are in JSON format.

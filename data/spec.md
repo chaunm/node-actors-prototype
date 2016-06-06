@@ -2,12 +2,16 @@ Data structures
 =====
 
 **Table Service**
-- uid: also the mailbox uid/request/#, uid/response, uid/event/#
+- uid
+- token
+- timestamp
 - name
+- type: "actor.{service, device, user}"
 - description
 - version
 - developer
 - status: status.{stopped, starting, started, stopping, error}
+- configuration: {ttl, location, protocol, macId, endpoint, class...}
 
 **Table Device**
 - uid = hash256(macid :: endpoint, for zigbee)

@@ -61,4 +61,22 @@ The actor uses following mailboxes
 No response to receive
 
 ## 3. Event
-No event emitted
+### 3.1 An actor goes offline
+**mailbox:** `event/actor_offline`
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {
+    uids: [
+      // UIDs of offline actors
+    ]  
+  },
+}
+```

@@ -1,26 +1,26 @@
-Device
+Logger
 ===================
 
 Version | Date          | Author | Description
 ------- | ------------- | ------ | ---------------
-1.0     | May 31th 2016 | Anh Le | Initial release
+1.0     | June 6th 2016 | Anh Le | Initial release
 
 # Overview
-This actor acts as a device
+This actor acts as a logger service
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system_device_<id>`
+The actor's local UID is: `system_logger`
 
 # B. Mailboxes
 The actor uses following mailboxes
 
 ## 1. Requests
-### 1.1 Setup
+### 1.1 Log
 - Set the actor up with necessary information
 - Only actor `system` can invoke this request.
 
-**mailbox:** `request/setup`
+**mailbox:** `request/log`
 
 **message:**
 
@@ -33,29 +33,8 @@ The actor uses following mailboxes
   },
 
   params: {
-    // any key value ...
-  }
-}
-```
-
-### 1.2 Update data
-- Update data.
-- Only actor `system` can invoke this request.
-
-**mailbox:** `request/update`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    // any key value ...
+    level: "log.{warning, info, critical, error}",
+    message: "blah blah blah"
   }
 }
 ```
@@ -75,25 +54,9 @@ The actor uses following mailboxes
 }
 ```
 
+
 ## 2. Response
-- Devices don't make any request. So they don't process response
+- Devices don't make any request. So they don't process any response
 
 ## 3. Event
-### 3.1 Data
-**mailbox:** `event/data`
-
-**message:** This is a retained message
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    // any key value ...
-  },
-}
-```
+- No uncommon events

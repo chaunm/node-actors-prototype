@@ -1,4 +1,4 @@
-Broker
+Security
 ===================
 
 Version | Date          | Author | Description
@@ -99,44 +99,8 @@ The actor uses following mailboxes
 }
 ```
 
-#### 1.1.3 Check if a user exists
-**mailbox:** `request/actors/exists`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    account
-  }  
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    error: "describing errors if have any"    
-  }
-}
-```
-
-#### 1.1.4 Delete a user
-**mailbox:** `request/actors/delete`
+#### 1.1.3 Remove a user
+**mailbox:** `request/actors/remove`
 
 **message:**
 
@@ -177,7 +141,7 @@ The actor uses following mailboxes
 
 ### 1.2 Grant APIs
 #### 1.2.1 Grant an actor to perform specific actions
-**mailbox:** `request/grant/set`
+**mailbox:** `request/grants/set`
 
 **message:**
 
@@ -188,15 +152,17 @@ The actor uses following mailboxes
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
-
-  actor, // guid of the actor to grant
-  actions: [ // list of activity & target
-    "pub topic1", // publish only
-    "sub topic1", // subscribe only
-    "pubsub topic1", // publish/subscribe
-    "forbid topic1", // forbid the actor to do any pub-sub
-    "forbid" // revoke any granted actions
-  ]
+  
+  params: {
+    actor, // guid of the actor to grant
+    actions: [ // list of activity & target
+      "pub topic1", // publish only
+      "sub topic1", // subscribe only
+      "pubsub topic1", // publish/subscribe
+      "forbid topic1", // forbid the actor to do any pub-sub
+      "forbid" // revoke any granted actions
+    ]
+    }
 }
 ```
 
@@ -231,8 +197,8 @@ The actor uses following mailboxes
 }
 ```
 
-1.2.2 Get all grants for a specific target
-- **mailbox:** `request/grant/get_by_target`
+1.2.2 Get all grants for a specific mailbox
+**mailbox:** `request/grants/get_by_mailbox`
 
 **message:**
 
@@ -244,7 +210,7 @@ The actor uses following mailboxes
     timestamp
   },
 
-  target: "system/#"
+  mailbox: "system/#"
 }
 ```
 
@@ -279,7 +245,7 @@ The actor uses following mailboxes
 ```
 
 #### 1.2.3 Get all granted actions for a specific actor
-**mailbox:** `request/grant/get_actions_by_actor`
+**mailbox:** `request/grants/get_by_actor`
 
 **message:**
 
@@ -324,7 +290,7 @@ The actor uses following mailboxes
 ```
 
 #### 1.2.4 Remove grants issued to an actor
-**mailbox:** `request/grant/remove_grants_by_actor`
+**mailbox:** `request/grant/remove_by_actor`
 
 **message:**
 
@@ -360,3 +326,4 @@ The actor uses following mailboxes
 
 **note**:
 - `System actors` does not affect by this request
+- You may use `request/actors/set` with `actions: [ 'forbid ']` to achieve the same result.
