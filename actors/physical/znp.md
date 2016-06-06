@@ -10,7 +10,7 @@ ZNP Actor
 This actor works with ZNP devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # UID
-The actor's local UID is: `system_znp`
+The actor's local UID is: `system/znp`
 
 # Mailboxes
 
@@ -194,7 +194,26 @@ This mailbox contains response from other actors
 }
 ```
 
-### 3.5 Device's data
+### 3.5 Device is online
+
+**mailbox:** `:event/device_online`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    macId,
+    protocol: "zigbee"
+  }
+}
+```
+
+### 3.6 Device's data
 
 **mailbox:** `:event/device_data`
 

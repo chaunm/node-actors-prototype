@@ -12,7 +12,7 @@ This actor acts as a housekeeper, being responsible for everything in our system
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system_housekeeper`
+The actor's local UID is: `system/housekeeper`
 
 # B. Mailboxes
 The actor uses following mailboxes

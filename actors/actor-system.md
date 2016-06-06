@@ -42,9 +42,9 @@ An actor owns 3 kind of mailboxes which are:
 
 #### 1.2.2 Interactions
 if properly configured, actors can:
-- Subscribe to their own `:request` & `Response` mailboxes
-- Publish messages to their own `Event` mailboxes
-- Publish messages to `:request` & `Response` mailboxes of other actors
+- Subscribe to their own `:request` & `:response` mailboxes
+- Publish messages to their own `:event` mailboxes
+- Publish messages to `:request` & `:response` mailboxes of other actors
 
 ### 1.3 Messages
 Interchanged messages are in JSON format.
