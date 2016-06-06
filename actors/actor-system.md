@@ -187,28 +187,7 @@ Upon finishing these requests, it should send a response to the sender's `/:resp
 }
 ```
 
-#### 2.3.2 Ping
-**Purpose** For monitor services to check the actor's availability
-
-**mailbox** `:request/ping`
-
-**message:**
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  request, // the original request here
-	response: {
-    status: "status.{success, failure.*}",
-    message: "pong"
-	}
-}
-```
-
-#### 2.3.3 Stop
+#### 2.3.2 Stop
 **Purpose** Safely stop any activities
 
 **mailbox** `:request/stop`
@@ -240,6 +219,23 @@ Upon finishing these requests, it should send a response to the sender's `/:resp
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
+  }
+}
+```
+
+### 2.4 Event
+Periodically emit status event via `:event/status` (every 5s) (retained message).
+
+For example:
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    status: "status.{online, offline}"
   }
 }
 ```

@@ -6,8 +6,8 @@ Version | Date          | Author | Description
 1.0     | May 31th 2016 | Anh Le | Initial release
 
 # Overview
-This actor runs forever, monitoring other actors to see if they're healthy
-- It subscribes to <any guid>/event/status
+This actor runs forever, monitoring system actors to see if they're healthy
+- It subscribes to system/<uid>/:event/status
 - Periodically check (60s per each check)
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
@@ -39,6 +39,7 @@ The actor uses following mailboxes
   }
 }
 ```
+
 **response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
