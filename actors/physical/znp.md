@@ -175,7 +175,26 @@ This mailbox contains response from other actors
 }
 ```
 
-### 3.4 Device's data
+### 3.4 Device is offline
+
+**mailbox:** `event/device_offline`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    macId,
+    protocol: "zigbee"
+  }
+}
+```
+
+### 3.5 Device's data
 
 **mailbox:** `event/device_data`
 
