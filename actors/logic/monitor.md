@@ -13,7 +13,7 @@ This actor runs forever, monitoring other actors to see if they're healthy
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system_monitor`
+The actor's local UID is: `system/monitor`
 
 # B. Mailboxes
 The actor uses following mailboxes
@@ -21,7 +21,7 @@ The actor uses following mailboxes
 ## 1. Requests
 ### 1.1 Check if an actor is online
 
-**mailbox:** `request/is_online`
+**mailbox:** `:request/is_online`
 
 **message:**
 
@@ -39,7 +39,7 @@ The actor uses following mailboxes
   }
 }
 ```
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -62,7 +62,7 @@ No response to receive
 
 ## 3. Event
 ### 3.1 An actor goes offline
-**mailbox:** `event/actor_offline`
+**mailbox:** `:event/actor_offline`
 **message:**
 
 ```javascript

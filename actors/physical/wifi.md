@@ -19,7 +19,7 @@ The actor uses following mailboxes:
 For serving requests from other actors
 ### 1.1 Broadcast
 
-**mailbox:** `request/broadcast`
+**mailbox:** `:request/broadcast`
 
 **message:**
 ```javascript
@@ -57,7 +57,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.2 Connect
 
-**mailbox:** `request/connect`
+**mailbox:** `:request/connect`
 
 **message:**
 ```javascript
@@ -77,7 +77,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
 ```js
 {
 	from, // znp's guid, added by Message Broker automatically
@@ -114,7 +114,7 @@ This mailbox contains response from other actors
 ## 3. Events
 ### 3.1 Connected
 
-**mailbox:** `event/connected`
+**mailbox:** `:event/connected`
 
 **message**: messages should conform the format
 ```js
@@ -132,7 +132,7 @@ This mailbox contains response from other actors
 
 ### 3.2 Disconnected
 
-**mailbox:** `event/disconnected`
+**mailbox:** `:event/disconnected`
 
 **message**: messages should conform the format
 ```js

@@ -20,7 +20,7 @@ The actor uses following mailboxes
 - Set the actor up with necessary information
 - Only actor `system` can invoke this request.
 
-**mailbox:** `request/log`
+**mailbox:** `:request/log`
 
 **message:**
 

@@ -16,7 +16,7 @@ Actors are programming concepts to model entities communicating via messages.
 ### 1.2 Mailboxes
 A mailbox (a topic) can be configured to subscribe or publish to a specific set of actors.
 + Each mailbox has its own URIs
-+ URIs can be organized into APIs. For example `<uid>/request/add_device`
++ URIs can be organized into APIs. For example `<uid>/:request/add_device`
 
 #### 1.2.1 Owned mailboxes
 Mailbox ownership can be defined as: if an actor is defined a uid 'A', then any mailbox `A/#` will be considered to be owned by the actor.
@@ -24,27 +24,27 @@ Mailbox ownership can be defined as: if an actor is defined a uid 'A', then any 
 An actor owns 3 kind of mailboxes which are:
 
 **Request mailboxes:**
-+ URIs: `<uid>/request/#`
++ URIs: `<uid>/:request/#`
 + to store messages asking the actor do something
 + Only authorized actors can publish messages to this mailboxes
 + Only the owning actor can subscribe to
 
 **Response mailboxes**
-+ URIs: `<uid>/response` (no sub-topic)
++ URIs: `<uid>/:response` (no sub-topic)
 + Store response messages from other actors upon request messages.
-+ Each response messages must have `request` fields to refer back to associated `Request messages`
++ Each response messages must have `:request` fields to refer back to associated `:request messages`
 
 **Event mailboxes:**
-+ URIs: `<uid>/event/#`
++ URIs: `<uid>/:event/#`
 + to store events emitted by the actor
 + Only the owning actor can publish to
 + Only authorized actors can subscribe to
 
 #### 1.2.2 Interactions
 if properly configured, actors can:
-- Subscribe to their own `Request` & `Response` mailboxes
+- Subscribe to their own `:request` & `Response` mailboxes
 - Publish messages to their own `Event` mailboxes
-- Publish messages to `Request` & `Response` mailboxes of other actors
+- Publish messages to `:request` & `Response` mailboxes of other actors
 
 ### 1.3 Messages
 Interchanged messages are in JSON format.
@@ -54,7 +54,7 @@ Broker will intercept such messages, appending `from` fields:
 
 A requests B to add_device and B responses. Let's assume that A is authorized
 
-*Step 1: A publishes a request message to B-uid/request/add_device*
+*Step 1: A publishes a request message to B-uid/:request/add_device*
 
 ```javascript
 {
@@ -67,7 +67,7 @@ A requests B to add_device and B responses. Let's assume that A is authorized
 }
 ```
 
-*Step 2: B executes the request, replying to A-uid/response*
+*Step 2: B executes the request, replying to A-uid/:response*
 
 ```javascript
 {
@@ -83,7 +83,7 @@ A requests B to add_device and B responses. Let's assume that A is authorized
 
 **Example 2: Events**
 
-Actor Wifi can emit `connected` events to `event/connected`:
+Actor Wifi can emit `connected` events to `:event/connected`:
 
 ```javascript
 {
@@ -149,7 +149,7 @@ Any response must contain the original request. For example:
 #### 2.3.1 Meta
 **Purpose** Get meta data about the actor
 
-**mailbox** `request/meta`
+**mailbox** `:request/meta`
 
 **message:**
 ```javascript
@@ -163,7 +163,7 @@ Any response must contain the original request. For example:
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `/response` mailbox with following info:
+Upon finishing these requests, it should send a response to the sender's `/:response` mailbox with following info:
 
 ```javascript
 {
@@ -187,10 +187,31 @@ Upon finishing these requests, it should send a response to the sender's `/respo
 }
 ```
 
-#### 2.3.2 Stop
+#### 2.3.2 Ping
+**Purpose** For monitor services to check the actor's availability
+
+**mailbox** `:request/ping`
+
+**message:**
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  request, // the original request here
+	response: {
+    status: "status.{success, failure.*}",
+    message: "pong"
+	}
+}
+```
+
+#### 2.3.3 Stop
 **Purpose** Safely stop any activities
 
-**mailbox** `request/stop`
+**mailbox** `:request/stop`
 
 **message:**
 ```javascript
@@ -207,7 +228,7 @@ Upon finishing these requests, it should send a response to the sender's `/respo
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```javascript
 {
@@ -219,31 +240,6 @@ Upon finishing these requests, it should send a response to the sender's `/respo
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
-  }
-}
-```
-
-### 2.4 Events
-```text
-`stopped` -> `starting` -> `started` -> `stopping` --> `stopped` ...
-									 -> 'stopped' (if error)
-						-> `stopped` (if error)
-
-```
-
-- Periodically emit `status event` via `event/status` (every 5s) (retained message)
-For example:
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
-    status: "status.{stopped, starting, started, stopping, error}",
-    error: "describing error (optionally if there is any)",
   }
 }
 ```

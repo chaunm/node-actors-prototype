@@ -22,7 +22,7 @@ The actor uses following mailboxes
 ## 1. Requests
 ### 1.1 xxx
 
-**mailbox:** `request/xxx`
+**mailbox:** `:request/xxx`
 
 **message:**
 
@@ -42,7 +42,7 @@ The actor uses following mailboxes
 
 ## 3. Event
 ### 3.1 xxx
-**mailbox:** `event/xxx`
+**mailbox:** `:event/xxx`
 
 **message:** This is a retained message
 

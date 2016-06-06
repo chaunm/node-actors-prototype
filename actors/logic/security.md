@@ -12,17 +12,17 @@ This actor acts as a broker, being responsible for managing connections to our s
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system_security`
+The actor's local UID is: `system/security`
 
 # B. Mailboxes
 The actor uses following mailboxes
 
-**Security note** Only `system_housekeeper` can interact with this actor
+**Security note** Only `system/housekeeper` can interact with this actor
 
 ## 1. Requests
 ### 1.1 Actor API
 #### 1.1.1 Create or Update
-**mailbox:** `request/actors/set`
+**mailbox:** `:request/actors/set`
 
 **message:**
 
@@ -42,7 +42,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -65,7 +65,7 @@ The actor uses following mailboxes
 - System actor can NOT be deleted once created. It can be deleted by using db commands via CLI.
 
 #### 1.1.2 Get all users
-**mailbox:** `request/actors/get_all`
+**mailbox:** `:request/actors/get_all`
 
 **message:**
 
@@ -79,7 +79,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -100,7 +100,7 @@ The actor uses following mailboxes
 ```
 
 #### 1.1.3 Remove a user
-**mailbox:** `request/actors/remove`
+**mailbox:** `:request/actors/remove`
 
 **message:**
 
@@ -118,7 +118,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -141,7 +141,7 @@ The actor uses following mailboxes
 
 ### 1.2 Grant APIs
 #### 1.2.1 Grant an actor to perform specific actions
-**mailbox:** `request/grants/set`
+**mailbox:** `:request/grants/set`
 
 **message:**
 
@@ -152,7 +152,7 @@ The actor uses following mailboxes
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
-  
+
   params: {
     actor, // guid of the actor to grant
     actions: [ // list of activity & target
@@ -166,7 +166,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -198,7 +198,7 @@ The actor uses following mailboxes
 ```
 
 1.2.2 Get all grants for a specific mailbox
-**mailbox:** `request/grants/get_by_mailbox`
+**mailbox:** `:request/grants/get_by_mailbox`
 
 **message:**
 
@@ -214,7 +214,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -245,7 +245,7 @@ The actor uses following mailboxes
 ```
 
 #### 1.2.3 Get all granted actions for a specific actor
-**mailbox:** `request/grants/get_by_actor`
+**mailbox:** `:request/grants/get_by_actor`
 
 **message:**
 
@@ -263,7 +263,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -290,7 +290,7 @@ The actor uses following mailboxes
 ```
 
 #### 1.2.4 Remove grants issued to an actor
-**mailbox:** `request/grant/remove_by_actor`
+**mailbox:** `:request/grant/remove_by_actor`
 
 **message:**
 
@@ -308,7 +308,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -326,4 +326,4 @@ The actor uses following mailboxes
 
 **note**:
 - `System actors` does not affect by this request
-- You may use `request/actors/set` with `actions: [ 'forbid ']` to achieve the same result.
+- You may use `:request/actors/set` with `actions: [ 'forbid ']` to achieve the same result.

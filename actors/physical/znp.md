@@ -20,7 +20,7 @@ The actor uses following mailboxes
 For serving requests from other actors
 ### 1.1 Add devices
 
-**mailbox:** `request/add_device`
+**mailbox:** `:request/add_device`
 
 **message:**
 ```javascript
@@ -56,7 +56,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.2 Remove devices
 
-**mailbox:** `request/remove_device`
+**mailbox:** `:request/remove_device`
 
 **message:**
 ```javascript
@@ -94,7 +94,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ## 2. Response
 This mailbox contains response from other actors
 
-**mailbox:** `response`
+**mailbox:** `:response`
 
 **message:**  messages should conform the format:
 ```js
@@ -116,7 +116,7 @@ This mailbox contains response from other actors
 ## 3. Events
 ### 3.1 New device is added
 
-**mailbox:** `event/device_added`
+**mailbox:** `:event/device_added`
 
 **message**: messages should conform the format
 ```js
@@ -138,7 +138,7 @@ This mailbox contains response from other actors
 
 ### 3.2 Device is removed
 
-**mailbox:** `event/device_removed`
+**mailbox:** `:event/device_removed`
 
 **message**: messages should conform the format
 ```js
@@ -157,7 +157,7 @@ This mailbox contains response from other actors
 
 ### 3.3 Device's error
 
-**mailbox:** `event/device_error`
+**mailbox:** `:event/device_error`
 
 **message**: messages should conform the format
 ```js
@@ -177,7 +177,7 @@ This mailbox contains response from other actors
 
 ### 3.4 Device is offline
 
-**mailbox:** `event/device_offline`
+**mailbox:** `:event/device_offline`
 
 **message**: messages should conform the format
 ```js
@@ -196,9 +196,10 @@ This mailbox contains response from other actors
 
 ### 3.5 Device's data
 
-**mailbox:** `event/device_data`
+**mailbox:** `:event/device_data`
 
 **message**: messages should conform the format
+
 ```js
 {
   header: { // added by our broker

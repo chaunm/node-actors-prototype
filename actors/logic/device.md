@@ -20,7 +20,7 @@ The actor uses following mailboxes
 - Set the actor up with necessary information
 - Only actor `system` can invoke this request.
 
-**mailbox:** `request/setup`
+**mailbox:** `:request/setup`
 
 **message:**
 
@@ -39,10 +39,11 @@ The actor uses following mailboxes
 ```
 
 ### 1.2 Update data
+
 - Update data.
 - Only actor `system` can invoke this request.
 
-**mailbox:** `request/update`
+**mailbox:** `:request/update`
 
 **message:**
 
@@ -60,7 +61,7 @@ The actor uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
 {
@@ -80,7 +81,7 @@ The actor uses following mailboxes
 
 ## 3. Event
 ### 3.1 Data
-**mailbox:** `event/data`
+**mailbox:** `:event/data`
 
 **message:** This is a retained message
 
