@@ -19,7 +19,44 @@ The actor's local UID is: `service/monitor`
 The actor uses following mailboxes
 
 ## 1. Requests
-### 1.1 Check if an actor is online
+### 1.1 Monitor
+Set actors to be monitored
+
+**mailbox:** `:request/monitor`
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+
+  params: {
+    ids: [] // IDs of the actor to monitor
+  }
+}
+```
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
+
+### 1.2 Check if an actor is online
 
 **mailbox:** `:request/is_online`
 
@@ -62,8 +99,10 @@ The actor uses following mailboxes
 No response to receive
 
 ## 3. Event
-### 3.1 An actor goes offline
-**mailbox:** `:event/actor_offline`
+### 3.1 Report
+Periodical emits these kind of events (6m)
+
+**mailbox:** `:event/report`
 **message:**
 
 ```javascript
@@ -75,9 +114,7 @@ No response to receive
   },
 
   params: {
-    uids: [
-      // UIDs of offline actors
-    ]  
+    <id>: <status.{online, offline}>
   },
 }
 ```

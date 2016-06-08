@@ -146,48 +146,8 @@ Any response must contain the original request. For example:
 
 - Must response to special requests
 
-#### 2.3.1 Meta
-**Purpose** Get meta data about the actor
+#### 2.3.1 Stop
 
-**mailbox** `:request/meta`
-
-**message:**
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  }
-}
-```
-
-**response**
-Upon finishing these requests, it should send a response to the sender's `/:response` mailbox with following info:
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  request, // the original request here
-	response: {
-    status: "status.{success, failure.*}",
-		name: "string",
-		description: "string",
-		version: "string",
-		developer: "string",
-		released: "release date",
-		configuration: {
-			ttl: "2d" // default 5m => ttl must be a mutiple of 60s
-		}
-	}
-}
-```
-
-#### 2.3.2 Stop
 **Purpose** Safely stop any activities
 
 **mailbox** `:request/stop`
