@@ -10,7 +10,7 @@ This actor acts as a device
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system/device/<id>`
+The actor's local UID is: `service/device/<id>`
 
 # B. Mailboxes
 The actor uses following mailboxes

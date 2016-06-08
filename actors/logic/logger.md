@@ -10,7 +10,7 @@ This actor acts as a logger service
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system/logger`
+The actor's local UID is: `service/logger`
 
 # B. Mailboxes
 The actor uses following mailboxes

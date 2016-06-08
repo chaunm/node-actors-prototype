@@ -10,8 +10,8 @@ Data structures
 - description
 - version
 - developer
-- status: status.{stopped, starting, started, stopping, error}
-- configuration: {ttl, location, protocol, macId, endpoint, class...}
+- status: status.{online, offline}
+
 
 **Table Device**
 - uid = hash256(macid :: endpoint, for zigbee)
@@ -22,8 +22,7 @@ Data structures
 - endpoint
 - class: class.device.*
 - data (current)
-- updated
-- status: status.{stopped, starting, started, stopping, error}
+- status: status.{online, offline}
 
 **Table DataSeries**
 - deviceId

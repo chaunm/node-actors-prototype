@@ -7,13 +7,13 @@ Version | Date          | Author | Description
 
 # Overview
 This actor runs forever, monitoring system actors to see if they're healthy
-- It subscribes to system/<uid>/:event/status
+- It subscribes to service/<id>/:event/status
 - Periodically check (60s per each check)
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system/monitor`
+The actor's local UID is: `service/monitor`
 
 # B. Mailboxes
 The actor uses following mailboxes

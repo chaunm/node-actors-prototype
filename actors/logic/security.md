@@ -12,12 +12,12 @@ This actor acts as a broker, being responsible for managing connections to our s
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `system/security`
+The actor's local UID is: `service/security`
 
 # B. Mailboxes
 The actor uses following mailboxes
 
-**Security note** Only `system/housekeeper` can interact with this actor
+**Security note** Only `service/housekeeper` can interact with this actor
 
 ## 1. Requests
 ### 1.1 Actor API

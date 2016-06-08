@@ -10,7 +10,7 @@ Wifi Actor
 This actor works with Wifi devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # UID
-The actor's local UID is: `system/wifi`
+The actor's local UID is: `service/wifi`
 
 # Mailboxes
 The actor uses following mailboxes:
