@@ -9,18 +9,17 @@ Version | Date          | Author | Description
 This actor acts as a device
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
-# A. UID
-The actor's local UID is: `service/device/<id>`
+# A. ID
+The actor's local ID is: `device/<id>`
 
 # B. Mailboxes
 The actor uses following mailboxes
 
 ## 1. Requests
-### 1.1 Setup
-- Set the actor up with necessary information
-- Only actor `system` can invoke this request.
+### 1.1 Get
+- Get information about the device
 
-**mailbox:** `:request/setup`
+**mailbox:** `:request/get`
 
 **message:**
 
@@ -33,7 +32,33 @@ The actor uses following mailboxes
   },
 
   params: {
-    // any key value ...
+    // left blank
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    device: {
+      id : 'device/' + hash256(macid :: endpoint, for zigbee),
+      name,
+      location,
+      protocol,
+      macId,
+      endpoint,
+      class: class.device.*,
+      data,
+      status: status.{online, offline}
+    }
   }
 }
 ```
@@ -41,7 +66,7 @@ The actor uses following mailboxes
 ### 1.2 Update data
 
 - Update data.
-- Only actor `system` can invoke this request.
+- Only actor `service/device-manager` can invoke this request.
 
 **mailbox:** `:request/update`
 
@@ -77,7 +102,7 @@ The actor uses following mailboxes
 ```
 
 ## 2. Response
-- Devices don't make any request. So they don't process response
+- Devices don't make any request. So they don't process any response
 
 ## 3. Event
 ### 3.1 Data

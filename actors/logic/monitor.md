@@ -56,6 +56,11 @@ Set actors to be monitored
 }
 ```
 
+`failure` may be:
+- invalid_params
+- unauthorized
+- database_error: error when working with database
+
 ### 1.2 Check if an actor is online
 
 **mailbox:** `:request/is_online`
@@ -114,7 +119,8 @@ Periodical emits these kind of events (6m)
   },
 
   params: {
-    <id>: <status.{online, offline}>
+    id: <id>, 
+    status: <status.{online, offline}>
   },
 }
 ```

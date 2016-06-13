@@ -1,4 +1,4 @@
-ZNP Actor
+ZNP Service
 =======================
 
 | Version | Date | Author | Description |
@@ -170,7 +170,7 @@ This mailbox contains response from other actors
   params: {
     macId,
     protocol: "zigbee",
-    error: "error.actor.code" // code describing the error (if any)  
+    error: "error.device.code" // code describing the error (if any)  
   }
 }
 ```

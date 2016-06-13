@@ -6,6 +6,7 @@ Actor System
 | 1.0.0  | May 26th 2016 | Anh Le  | Initial release |
 | 1.1.0  | May 30th 2016 | Anh Le  | Modify Actor Commons |
 
+
 ## 1. Actors
 ### 1.1 Overview
 Actors are programming concepts to model entities communicating via messages.

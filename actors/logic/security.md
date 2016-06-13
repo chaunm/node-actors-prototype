@@ -4,6 +4,7 @@ Security
 Version | Date          | Author | Description
 ------- | ------------- | ------ | ---------------
 1.0     | May 28th 2016 | Anh Le | Initial release
+1.1.0     | June 14th 2016 | Anh Le | Modify requests
 
 # Overview
 
@@ -11,18 +12,18 @@ This actor acts as a broker, being responsible for managing connections to our s
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
-# A. UID
-The actor's local UID is: `service/security`
+**Security** Only `service/house-keeper` can interact with this actor
+
+# A. ID
+The actor's local ID is: `service/security`
 
 # B. Mailboxes
 The actor uses following mailboxes
 
-**Security note** Only `service/housekeeper` can interact with this actor
-
 ## 1. Requests
-### 1.1 Actor API
-#### 1.1.1 Create or Update
-**mailbox:** `:request/actors/set`
+### 1.1 Create
+
+**mailbox:** `:request/create`
 
 **message:**
 
@@ -35,9 +36,94 @@ The actor uses following mailboxes
   },
 
   params: {
-    account,
-    password, //hashed with sha256
-    system: true or false
+    id,
+    token, //hashed with sha256
+    class, // class.service, class.device.*, class.user.{guest, admin}
+    permission: [
+      "pub topic", // publish only
+      "sub topic", // subscribe only
+      "pubsub topic", // publish/subscribe
+      "forbid topic", // forbid the actor to do any pub-sub
+    ],
+    // any key-value else
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
+
+**note**
+- If there's any actor with such account, it will be overridden.
+
+### 1.2 Update
+- Update meta data for a specific actor
+
+**mailbox:** `:request/update/<id>`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {
+    // any key-value else (excluding id)
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
+
+
+### 1.3 Get all actors
+**mailbox:** `:request/get`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {
+    // if have any key-value query against data field
   }
 }
 ```
@@ -55,17 +141,15 @@ The actor uses following mailboxes
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
-    error: "describing errors if have any"
+    actors: [
+      {} // ..
+    ]
   }
 }
 ```
 
-**note**
-- If there's any actor with such account, it will be overridden.
-- System actor can NOT be deleted once created. It can be deleted by using db commands via CLI.
-
-#### 1.1.2 Get all users
-**mailbox:** `:request/actors/get_all`
+### 1.4 Get a specific actor
+**mailbox:** `:request/get/<id>`
 
 **message:**
 
@@ -99,8 +183,8 @@ The actor uses following mailboxes
 }
 ```
 
-#### 1.1.3 Remove a user
-**mailbox:** `:request/actors/remove`
+### 1.5 Remove an actor
+**mailbox:** `:request/remove/<id>`
 
 **message:**
 
@@ -111,10 +195,6 @@ The actor uses following mailboxes
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
-
-  params: {
-    account
-  }  
 }
 ```
 
@@ -129,201 +209,11 @@ The actor uses following mailboxes
 
   request, // the original request here
   response: {
-    status: "status.{success, failure.*}",
-    error: "describing errors if have any"    
+    status: "status.{success, failure.*}"
   }
 }
 ```
 
 **note**
-- `system actors` can not be deleted via this request
+- `service/#` can not be deleted via this request
 - any grants associated with the actor will be deleted as well.
-
-### 1.2 Grant APIs
-#### 1.2.1 Grant an actor to perform specific actions
-**mailbox:** `:request/grants/set`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    actor, // guid of the actor to grant
-    actions: [ // list of activity & target
-      "pub topic1", // publish only
-      "sub topic1", // subscribe only
-      "pubsub topic1", // publish/subscribe
-      "forbid topic1", // forbid the actor to do any pub-sub
-      "forbid" // revoke any granted actions
-    ]
-    }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    error: "describing errors if have any"
-  }
-}
-```
-
-**note**
-- The new actions will be merged (NOT overwrite) into the current action set of the actor.
-- Grants will be processed sequentially. So you may have following grants to clear granted actions.
-```js
-{
-  actions: [
-    "forbid", // revoke any grant
-    "forbid system/#",
-    "pub system/api", // oh yeah, grant it to publish to the system/api topic
-    "sub system/"
-  ]
-}
-```
-
-1.2.2 Get all grants for a specific mailbox
-**mailbox:** `:request/grants/get_by_mailbox`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  mailbox: "system/#"
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    error: "describing errors if have any",
-    grants:[
-      {
-        actor, // guid of the actor to grant
-        actions: [ // list of activity & target
-          "pub topic1", // publish only
-          "sub topic1", // subscribe only
-          "pubsub topic1", // publish/subscribe
-          "forbid topic1", // forbid the actor to do any pub-sub
-          "forbid" // revoke any granted actions
-        ]
-      },
-      // ....
-    ]
-  }
-}
-```
-
-#### 1.2.3 Get all granted actions for a specific actor
-**mailbox:** `:request/grants/get_by_actor`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    actor, // guid of the actor
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    grant: {
-      actor, // guid of the actor to grant
-      actions: [ // list of activity & target
-        "pub topic1", // publish only
-        "sub topic1", // subscribe only
-        "pubsub topic1", // publish/subscribe
-        "forbid topic1", // forbid the actor to do any pub-sub
-        "forbid" // revoke any granted actions
-      ]
-    }
-  }
-}
-```
-
-#### 1.2.4 Remove grants issued to an actor
-**mailbox:** `:request/grant/remove_by_actor`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    actor, // guid of the actor
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    error: "describing errors if have any"
-  }
-}
-```
-
-**note**:
-- `System actors` does not affect by this request
-- You may use `:request/actors/set` with `actions: [ 'forbid ']` to achieve the same result.

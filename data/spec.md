@@ -2,19 +2,20 @@ Data structures
 =====
 
 **Table Service**
-- uid
+- id
 - token
-- timestamp
 - name
-- type: "actor.{service, device, user}"
+- class: "class.{service, device, user}"
 - description
 - version
 - developer
 - status: status.{online, offline}
+- timestamp // last update
 
 
 **Table Device**
-- uid = hash256(macid :: endpoint, for zigbee)
+- id = hash256(macid :: endpoint, for zigbee)
+- token
 - name
 - location
 - protocol (Zigbee)
@@ -23,11 +24,22 @@ Data structures
 - class: class.device.*
 - data (current)
 - status: status.{online, offline}
+- timestamp // last update
 
-**Table DataSeries**
+**Table DataSeries** series must have capacities configured in Registry
 - deviceId
-- data
-- timestamp
+- data : [{}, {}]
+- timestamp // last update
 
-**Table Actors**
-- uid
+**Table Users**
+- id
+- token
+- name
+- phone // number
+- address
+- gender
+- location
+- class: class.user.{guest, admin}
+- permissions: ['publish #', 'subscribe #', 'pubsub #']
+
+**Table Notifcation**

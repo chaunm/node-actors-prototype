@@ -1,4 +1,4 @@
-Wifi Actor
+Wifi Service
 =======================
 
 | Version | Date | Author | Description |
