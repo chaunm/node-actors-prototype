@@ -6,7 +6,7 @@ Version | Date          | Author | Description
 1.0     | May 31th 2016 | Anh Le | Initial release
 
 # Overview
-This actor acts as a device
+This actor acts as a device. Trigger services may then operate on such device
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. ID
@@ -17,7 +17,7 @@ The actor uses following mailboxes
 
 ## 1. Requests
 ### 1.1 Get
-- Get information about the device
+Get information about the device
 
 **mailbox:** `:request/get`
 
@@ -63,7 +63,46 @@ The actor uses following mailboxes
 }
 ```
 
-### 1.2 Update data
+### 1.2 Get
+Get data emitted by this device (time series)
+
+**mailbox:** `:request/get/data`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {
+    // left blank
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    data: [
+      // currently we dont figure out how to ...
+    ]
+  }
+}
+```
+
+### 1.3 Update
 
 - Update data.
 - Only actor `service/device-manager` can invoke this request.
@@ -105,8 +144,8 @@ The actor uses following mailboxes
 - Devices don't make any request. So they don't process any response
 
 ## 3. Event
-### 3.1 Data
-**mailbox:** `:event/data`
+### 3.1 Device data
+**mailbox:** `:event/device_data`
 
 **message:** This is a retained message
 
@@ -120,6 +159,24 @@ The actor uses following mailboxes
 
   params: {
     // any key value ...
+  },
+}
+```
+### 3.2 Device status
+**mailbox:** `:event/device_status`
+
+**message:** This is a retained message
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {
+    status: 'status.{online, offline, error}'
   },
 }
 ```

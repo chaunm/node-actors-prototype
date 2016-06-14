@@ -14,13 +14,14 @@ Currently, only `service/znp` is supported.
 This actor only works with `service/housekeeper`, `system`.
 
 This service's responsible for following things:
+
 **On boot**
 - Get all devices
 - Activate associated devices
 - Restore their previous data
 
 **On runtime**
-- Store information about devices (in RethinkDb)
+- Store information about devices (in Redis)
 - Create new devices (if there's no such device in our database)
 - Relay data events to associated devices. That is: `znp -> device-manager -> device`
 
