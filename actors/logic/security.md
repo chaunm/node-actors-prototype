@@ -12,7 +12,7 @@ This actor acts as a broker, being responsible for managing connections to our s
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
-**Security** Only `service/house-keeper` can interact with this actor
+**Security** Only `service/housekeeper`, `system` can interact with this actor
 
 # A. ID
 The actor's local ID is: `service/security`

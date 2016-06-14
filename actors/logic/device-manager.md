@@ -74,8 +74,8 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 }
 ```
 
-### 1.2 Get devices
-- Get added devices 
+### 1.2 Get all devices
+- Get all added devices 
 
 **mailbox:** `:request/get`
 
@@ -89,8 +89,8 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     timestamp
   },
   params: {
-    // any query against key-value pairs a devices
-    // or left-blank to get all devices
+    // Left-blank to get all devices
+    // In the future, we may support queries against key-value pairs a devices
   }
 }
 ```
@@ -129,10 +129,56 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 }
 ```
 
-### 1.3 Update data
+### 1.3 Get a device
+- Get information about a device
+
+**mailbox:** `:request/get/<id>`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {}
+}
+```
+
+**response** 
+
+Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    device: {
+      id : 'device/' + hash256(macid :: endpoint, for zigbee),
+      name,
+      location,
+      protocol,
+      macId,
+      endpoint,
+      class: class.device.*,
+      data,
+      status: status.{online, offline}
+    }
+}
+```
+
+### 1.4 Update data
 - Update meta data for a device.
 
-**mailbox:** `:request/update`
+**mailbox:** `:request/update/<id>`
 
 **message:**
 
@@ -148,6 +194,75 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     id, // of device (required)
     // any key value else
   }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
+
+### 1.5 Remove all devices
+
+**mailbox:** `:request/remove`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {
+    // Left-blank to get all devices
+    // In the future, we may support queries against key-value pairs a devices
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
+
+### 1.6 Remove a device
+
+**mailbox:** `:request/remove/<id>`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {}
 }
 ```
 
