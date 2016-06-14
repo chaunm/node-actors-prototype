@@ -37,13 +37,12 @@ The actor uses following mailboxes
 
   params: {
     id,
-    token, //hashed with sha256
+    token, //may be pre-hashed with sha256
     class, // class.service, class.device.*, class.user.{guest, admin}
-    permission: [
-      "pub topic", // publish only
-      "sub topic", // subscribe only
+    permissions: [ // this field is required
+      "publish topic", // publish only
+      "subscribe topic", // subscribe only
       "pubsub topic", // publish/subscribe
-      "forbid topic", // forbid the actor to do any pub-sub
     ],
     // any key-value else
   }
@@ -108,6 +107,7 @@ The actor uses following mailboxes
 }
 ```
 
+**note** This request will override existing data.
 
 ### 1.3 Get all actors
 **mailbox:** `:request/get`
@@ -176,9 +176,9 @@ The actor uses following mailboxes
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
-    actors: [
-      // list of user accounts (without passwords)
-    ]
+    actor: {
+      // list of key-value attributes (without passwords)
+    }
   }
 }
 ```

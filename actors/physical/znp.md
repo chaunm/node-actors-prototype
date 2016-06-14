@@ -129,7 +129,7 @@ This mailbox contains response from other actors
   params:{
     macId,
     endpoint,
-    // class.device.sensor.{motion, humidity, door, smoke}, class.device.keyfob.{panic, remote}
+    // class.device.sensor.{motion, humidity, door, fire}, class.device.keyfob.{panic, remote}
     deviceClass,
     protocol: "zigbee"
   }
@@ -248,8 +248,8 @@ This mailbox contains response from other actors
       humidity: 32, // percentage
       battery: 0 or 1,    
 
-      // smoke sensor
-      smoke: 0 or 1, // 1 -> smoke detected
+      // fire sensor
+      fire: 0 or 1, // 1 -> fire detected
       battery: 0 or 1,    
 
       // panic button
