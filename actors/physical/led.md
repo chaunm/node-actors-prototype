@@ -16,7 +16,7 @@ For serving requests from other actors
 
 #### 1.1 Turn on led
 
-**mailbox:** `:request/turnOn`
+**mailbox:** `:request/turn_on`
 
 **message:**
 ```js
@@ -50,7 +50,7 @@ For serving requests from other actors
 
 #### 1.2 Turn off led
 
-**mailbox:** `:request/turnOff`
+**mailbox:** `:request/turn_off`
 
 **message**
 ```js
@@ -127,7 +127,7 @@ This service is an actuator and generate no request to other actors.
 
 #### 3.1 State changed
 
-**mailbox:** `:event/stateChanged`
+**mailbox:** `:event/state_changed`
 
 **message:** messages should conform the format
 ```js
