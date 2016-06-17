@@ -138,6 +138,6 @@ This service is an actuator and generate no request to other actors.
   },
   params: {
     color: "color.{red, green, orange}",
-    state : "state.{on,off,blinking}
+    state : "state.{on,off,blinking}"
   }  
 ```
