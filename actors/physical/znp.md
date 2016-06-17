@@ -4,6 +4,7 @@ ZNP Service
 | Version | Date | Author | Description |
 |-------|-------|-------|-------------|
 | 1.0  | May 26th 2016 | Anh Le  | Initial release |
+| 1.0.1  | June 15th 2016 | Anh Le  | Modify message formats |
 
 # Overview
 
@@ -130,8 +131,9 @@ This mailbox contains response from other actors
     macId,
     endpoint,
     // class.device.sensor.{motion, humidity, door, fire}, class.device.keyfob.{panic, remote}
-    deviceClass,
-    protocol: "zigbee"
+    class,
+    protocol: "zigbee",
+    // any key-value else
   }
 }
 ```
@@ -229,7 +231,6 @@ This mailbox contains response from other actors
   params: {
     macId,
     endpoint,
-    protocol: "zigbee",
     data: { //json object
 
       // motion sensor

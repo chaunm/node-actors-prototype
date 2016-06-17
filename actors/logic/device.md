@@ -3,14 +3,14 @@ Device
 
 Version | Date          | Author | Description
 ------- | ------------- | ------ | ---------------
-1.0     | May 31th 2016 | Anh Le | Initial release
+1.0     | June 16th 2016 | Anh Le | Initial release
 
 # Overview
 This actor acts as a device. Trigger services may then operate on such device
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. ID
-The actor's local ID is: `device/<id>`
+The actor's local ID is: `device/<macId>@<endpoint>`
 
 # B. Mailboxes
 The actor uses following mailboxes
@@ -49,7 +49,7 @@ Get information about the device
   response: {
     status: "status.{success, failure.*}",
     device: {
-      id : 'device/' + hash256(macid :: endpoint, for zigbee),
+      id : 'device/' + <macId> @ <endpoint>,
       name,
       location,
       protocol,
@@ -63,10 +63,11 @@ Get information about the device
 }
 ```
 
-### 1.2 Get
-Get data emitted by this device (time series)
+### 1.2 Get history data 
 
-**mailbox:** `:request/get/data`
+This is a time series data
+
+**mailbox:** `:request/history`
 
 **message:**
 
@@ -104,7 +105,7 @@ Get data emitted by this device (time series)
 
 ### 1.3 Update
 
-- Update data.
+- Update data
 - Only actor `service/device-manager` can invoke this request.
 
 **mailbox:** `:request/update`

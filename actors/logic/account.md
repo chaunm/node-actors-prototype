@@ -1,26 +1,32 @@
-Security
+Service Account
 ===================
 
 Version | Date          | Author | Description
 ------- | ------------- | ------ | ---------------
 1.0     | May 28th 2016 | Anh Le | Initial release
 1.1.0     | June 14th 2016 | Anh Le | Modify requests
+1.1.1     | June 15th 2016 | Anh Le | Modify service name
+1.1.2     | June 16th 2016 | Anh Le | Modify endpoints to not include <id>, adding attribute data 
 
 # Overview
 
-This actor acts as a broker, being responsible for managing connections to our system bus
+This actor acts as a broker, being responsible for managing:
+- accounts in our system
+- related meta data for each account
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
-**Security** Only `service/housekeeper`, `system` can interact with this actor
+**Security** 
+Only `service/housekeeper`, `system`, `service/device-manager` can interact with this actor
 
 # A. ID
-The actor's local ID is: `service/security`
+The actor's local ID is: `service/account`
 
 # B. Mailboxes
 The actor uses following mailboxes
 
 ## 1. Requests
+
 ### 1.1 Create
 
 **mailbox:** `:request/create`
@@ -45,6 +51,8 @@ The actor uses following mailboxes
       "pubsub topic", // publish/subscribe
     ],
     // any key-value else
+    // dedicated fields including:
+    // data: [object] for storing device data 
   }
 }
 ```
@@ -72,7 +80,7 @@ The actor uses following mailboxes
 ### 1.2 Update
 - Update meta data for a specific actor
 
-**mailbox:** `:request/update/<id>`
+**mailbox:** `:request/update`
 
 **message:**
 
@@ -85,7 +93,11 @@ The actor uses following mailboxes
   },
 
   params: {
-    // any key-value else (excluding id)
+    id, // id of account to update
+    // any key-value else
+    // other dedicated keys:
+    // data: [object] for storing data
+    // permissions: [rules] for storing ACLs
   }
 }
 ```
@@ -110,7 +122,7 @@ The actor uses following mailboxes
 **note** This request will override existing data.
 
 ### 1.3 Get all actors
-**mailbox:** `:request/get`
+**mailbox:** `:request/getAll`
 
 **message:**
 
@@ -148,8 +160,8 @@ The actor uses following mailboxes
 }
 ```
 
-### 1.4 Get a specific actor
-**mailbox:** `:request/get/<id>`
+### 1.4 Get information about a specific actor
+**mailbox:** `:request/get`
 
 **message:**
 
@@ -159,6 +171,9 @@ The actor uses following mailboxes
     from, // sender's guid
     id, // generated & maintained by the sender (for callbacks)
     timestamp
+  },
+  params:{
+    id, // id of account to get
   }
 }
 ```
@@ -177,14 +192,14 @@ The actor uses following mailboxes
   response: {
     status: "status.{success, failure.*}",
     actor: {
-      // list of key-value attributes (without passwords)
+      // list of key-value attributes (without passwords or token)
     }
   }
 }
 ```
 
 ### 1.5 Remove an actor
-**mailbox:** `:request/remove/<id>`
+**mailbox:** `:request/remove`
 
 **message:**
 
@@ -195,6 +210,10 @@ The actor uses following mailboxes
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  params: {
+    id, // id of account to update
+    // any key-value else
+  }
 }
 ```
 
