@@ -122,7 +122,7 @@ The actor uses following mailboxes
 **note** This request will override existing data.
 
 ### 1.3 Get all actors
-**mailbox:** `:request/getAll`
+**mailbox:** `:request/get_all`
 
 **message:**
 
