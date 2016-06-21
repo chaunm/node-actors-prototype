@@ -1,9 +1,6 @@
 LED
 ======
 
-| Version | Date | Author | Description |
-|-------|-------|-------|-------------|
-| 1.0  | June 17th 2016 | Chau Nguyen  | Initial release |
 
 The actor's local UID is: `service/led`
 

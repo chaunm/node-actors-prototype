@@ -1,10 +1,6 @@
 ZNP Service
 =======================
 
-| Version | Date | Author | Description |
-|-------|-------|-------|-------------|
-| 1.0  | May 26th 2016 | Anh Le  | Initial release |
-| 1.0.1  | June 15th 2016 | Anh Le  | Modify message formats |
 
 # Overview
 
@@ -21,7 +17,7 @@ The actor uses following mailboxes
 For serving requests from other actors
 ### 1.1 Add devices
 
-**mailbox:** `:request/add_device`
+**mailbox:** `:request/add_devices`
 
 **message:**
 ```javascript
@@ -151,8 +147,7 @@ This mailbox contains response from other actors
     timestamp
   },
   params: {
-    macId,
-    protocol: "zigbee"
+    macId
   }
 }
 ```

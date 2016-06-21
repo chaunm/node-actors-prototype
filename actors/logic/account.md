@@ -1,13 +1,6 @@
 Service Account
 ===================
 
-Version | Date          | Author | Description
-------- | ------------- | ------ | ---------------
-1.0     | May 28th 2016 | Anh Le | Initial release
-1.1.0     | June 14th 2016 | Anh Le | Modify requests
-1.1.1     | June 15th 2016 | Anh Le | Modify service name
-1.1.2     | June 16th 2016 | Anh Le | Modify endpoints to not include <id>, adding attribute data 
-
 # Overview
 
 This actor acts as a broker, being responsible for managing:
@@ -78,7 +71,8 @@ The actor uses following mailboxes
 - If there's any actor with such account, it will be overridden.
 
 ### 1.2 Update
-- Update meta data for a specific actor
+
+Update meta data for a specific actor
 
 **mailbox:** `:request/update`
 
@@ -122,6 +116,7 @@ The actor uses following mailboxes
 **note** This request will override existing data.
 
 ### 1.3 Get all actors
+
 **mailbox:** `:request/get_all`
 
 **message:**
@@ -135,7 +130,12 @@ The actor uses following mailboxes
   },
 
   params: {
-    // if have any key-value query against data field
+    // You may query via id patterns
+    id: 'pattern'
+    //id : 'device/*' -> for all devices
+    // id: 'services/*' -> for all services
+    // id: '*' -> for all
+    // if no id pattern specified, by default pattern = '*'  
   }
 }
 ```
@@ -161,6 +161,7 @@ The actor uses following mailboxes
 ```
 
 ### 1.4 Get information about a specific actor
+
 **mailbox:** `:request/get`
 
 **message:**
@@ -198,7 +199,57 @@ The actor uses following mailboxes
 }
 ```
 
-### 1.5 Remove an actor
+### 1.5 Get time series data for a specific actor
+
+**mailbox:** `:request/get_data_series`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params:{
+    id, // id of account to get
+
+    // you may optionally specify the time range
+    time: [start, stop] 
+    // or may be
+    time: [start] 
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.{no_data,*}}",
+    data: {
+      field1: [
+        {value: 1, time: 3232323},
+        {value: 2, time: 3232324},
+      ],
+      field2: [
+      ]
+    }
+  }
+}
+```
+
+### 1.6 Remove an actor
+
 **mailbox:** `:request/remove`
 
 **message:**
@@ -232,6 +283,51 @@ The actor uses following mailboxes
   }
 }
 ```
+
+### 1.7 List actors
+List all actors in our system
+
+**mailbox:** `:request/list`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    // You may query via id patterns
+    id: 'pattern'
+    //id : 'device/*' -> for all devices
+    // id: 'services/*' -> for all services
+    // id: '*' -> for all
+    // if no id pattern specified, by default pattern = '*'
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    actors:[
+      // list of actors's id
+    ]
+  }
+}
+```
+
 
 **note**
 - `service/#` can not be deleted via this request

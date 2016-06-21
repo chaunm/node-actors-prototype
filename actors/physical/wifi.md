@@ -1,9 +1,6 @@
 Wifi Service
 =======================
 
-| Version | Date | Author | Description |
-|-------|-------|-------|-------------|
-| 1.0  | May 30th 2016 | Anh Le  | Initial release |
 
 # Overview
 

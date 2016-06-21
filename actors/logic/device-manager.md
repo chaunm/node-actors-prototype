@@ -1,10 +1,6 @@
 Device Manager Service
 ===================
 
-Version | Date          | Author | Description
-------- | ------------- | ------ | ---------------
-1.0     | June 13th 2016 | Anh Le | Initial release
-
 # Overview
 This actor acts as a device manager, listening for all device-related events
 It must conform `Actor Commons` (see more in `../actor-system.md`)
@@ -29,7 +25,7 @@ This service's responsible for following things:
 The actor's local ID is: `service/device-manager`
 
 # B. External mailboxes
-- Subscribes to `service/znp/:event/#`
+Subscribes to `service/znp/:event/#`
 
 # C. Owned mailboxes
 
@@ -40,7 +36,7 @@ The actor uses following owned mailboxes
 - Allow new devices to join 
 - Only `admin users` can invoke this request
 
-**mailbox:** `:request/add`
+**mailbox:** `:request/add_devices`
 
 **message:**
 ```js
@@ -78,7 +74,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ### 1.2 Get all devices
 - Get all added devices 
 
-**mailbox:** `:request/get`
+**mailbox:** `:request/get_all`
 
 **message:**
 
@@ -112,7 +108,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     status: "status.{success, failure.*}",
     devices: [
       {
-        id : 'device/' + hash256(macid :: endpoint, for zigbee),
+        id : 'device/' + macid + '@' + endpoint,
         name,
         location,
         protocol,
@@ -133,7 +129,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ### 1.3 Get a device
 - Get information about a device
 
-**mailbox:** `:request/get/<id>`
+**mailbox:** `:request/get`
 
 **message:**
 
@@ -144,7 +140,9 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
-  params: {}
+  params: {
+    id
+  }
 }
 ```
 
@@ -179,7 +177,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ### 1.4 Update data
 - Update meta data for a device.
 
-**mailbox:** `:request/update/<id>`
+**mailbox:** `:request/update`
 
 **message:**
 
@@ -251,7 +249,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.6 Remove a device
 
-**mailbox:** `:request/remove/<id>`
+**mailbox:** `:request/remove`
 
 **message:**
 
@@ -263,7 +261,9 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     timestamp
   },
 
-  params: {}
+  params: {
+    macId
+  }
 }
 ```
 

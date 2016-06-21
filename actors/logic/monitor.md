@@ -1,10 +1,6 @@
 Monitor
 ===================
 
-Version | Date          | Author | Description
-------- | ------------- | ------ | ---------------
-1.0     | May 31th 2016 | Anh Le | Initial release
-
 # Overview
 This actor runs forever, monitoring system actors to see if they're healthy
 - It subscribes to service/<id>/:event/status

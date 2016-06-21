@@ -1,10 +1,6 @@
 Logger
 ===================
 
-Version | Date          | Author | Description
-------- | ------------- | ------ | ---------------
-1.0     | June 6th 2016 | Anh Le | Initial release
-
 # Overview
 This actor acts as a logger service
 It must conform `Actor Commons` (see more in `../actor-system.md`)

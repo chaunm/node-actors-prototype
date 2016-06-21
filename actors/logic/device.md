@@ -1,9 +1,6 @@
 Device
 ===================
 
-Version | Date          | Author | Description
-------- | ------------- | ------ | ---------------
-1.0     | June 16th 2016 | Anh Le | Initial release
 
 # Overview
 This actor acts as a device. Trigger services may then operate on such device
@@ -122,6 +119,10 @@ This is a time series data
 
   params: {
     // any key value ...
+
+    // Excluding dedicated fields
+    // data : { } --> for updating data
+
   }
 }
 ```
