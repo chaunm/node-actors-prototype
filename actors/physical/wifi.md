@@ -28,7 +28,6 @@ For serving requests from other actors
   },
 
   params: {
-    id, // generated & maintained by the actor (for callbacks)
     ssid: "string",
     password: ""
   }
@@ -66,7 +65,6 @@ Upon finishing these requests, it should send a response to the sender's 'respon
   },
 
   params: {
-    id, // generated & maintained by the actor (for callbacks)
     ssid: "string",
     password: ""  
   }
@@ -80,11 +78,11 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 	from, // znp's guid, added by Message Broker automatically
   request, // the original request here
   response: {
-    status: "status.{success, failure.*}",
-    error: "describing errors if have any"    
+    status: "status.{success, failure.*}"  
   }
 }
 ```
+If we can't establish a connection with the target Wifi network, this Wifi service will automatically re-broadcast.
 
 ## 2. Response
 This mailbox contains response from other actors
