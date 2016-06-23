@@ -45,8 +45,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
   },
   request, // the original request here
   response: {
-    status: "status.{success, failure.*}",
-    error: "describing errors if have any"
+    status: "status.{success, failure.*}"
   }
 }
 ```

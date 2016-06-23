@@ -213,7 +213,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.5 Remove all devices
 
-**mailbox:** `:request/remove`
+**mailbox:** `:request/remove_all`
 
 **message:**
 
@@ -262,7 +262,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
   },
 
   params: {
-    macId
+    id
   }
 }
 ```
@@ -285,5 +285,49 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ## 2. Response
 **mailbox:** `:response`
 
-## 3. Event
+## 3. Events
 
+### 3.1 Device added
+
+**mailbox:** `:event/device_added
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params:{
+    device: {
+      id, 
+      macId,
+      endpoint,
+      // class.device.sensor.{motion, humidity, door, fire}, class.device.keyfob.{panic, remote}
+      class,
+      protocol: "zigbee",
+      // any key-value else
+    }
+  }
+}
+```
+
+### 3.2 Device removed, online, offline
+**mailbox:** `:event/device_{removed, online, offline}
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params:{
+    device: {
+      id
+    }
+  }
+}
+```

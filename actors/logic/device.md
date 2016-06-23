@@ -146,8 +146,10 @@ This is a time series data
 - Devices don't make any request. So they don't process any response
 
 ## 3. Event
-### 3.1 Device data
-**mailbox:** `:event/device_data`
+### 3.1 Device updated
+Any update in configuration or data will be reflected in this event
+
+**mailbox:** `:event/device_updated`
 
 **message:** This is a retained message
 
@@ -160,7 +162,7 @@ This is a time series data
   },
 
   params: {
-    // any key value ...
+    // any updated key-value pairs
   },
 }
 ```
