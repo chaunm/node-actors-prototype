@@ -84,6 +84,9 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 ```
 If we can't establish a connection with the target Wifi network, this Wifi service will automatically re-broadcast.
 
+**note**
+The timeout must be set to > 1 min
+
 ## 2. Response
 This mailbox contains response from other actors
 

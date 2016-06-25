@@ -38,14 +38,14 @@ The actor uses following mailboxes
     id,
     token, //may be pre-hashed with sha256
     class, // class.service, class.device.*, class.user.{guest, admin}
-    permissions: [ // this field is required
-      "publish topic", // publish only
-      "subscribe topic", // subscribe only
-      "pubsub topic", // publish/subscribe
-    ],
+    permissions: {
+      publish: [], // publish only
+      subscribe: [], // subscribe only
+      pubsub: [] // both publish & subscribe
+    },
     // any key-value else
     // dedicated fields including:
-    // data: [object] for storing device data 
+    // data: object for storing device data 
   }
 }
 ```
@@ -91,7 +91,7 @@ Update meta data for a specific actor
     // any key-value else
     // other dedicated keys:
     // data: [object] for storing data
-    // permissions: [rules] for storing ACLs
+    // permissions: {rules} for storing ACLs
   }
 }
 ```
