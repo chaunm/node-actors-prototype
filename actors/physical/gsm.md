@@ -7,7 +7,7 @@ Wifi Service
 This actor works with gsm devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # UID
-The actor's local UID is: `service/camera`
+The actor's local UID is: `service/gsm`
 
 # Mailboxes
 The actor uses following mailboxes:
@@ -143,7 +143,7 @@ This mailbox contains response from other actors
 
 ### 3.3 Gsm start
 This message is sent to tell system that the gsm devices is properly started.
-**mailbox:** `:event/gsm_start`
+**mailbox:** `:event/gsm_started`
 
 **message**: messages should conform the format
 ```js
