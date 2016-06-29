@@ -1,12 +1,6 @@
 Actor System
 ===============
 
-| Version | Date | Author | Description |
-|-------|-------|-------|-------------|
-| 1.0.0  | May 26th 2016 | Anh Le  | Initial release |
-| 1.1.0  | May 30th 2016 | Anh Le  | Modify Actor Commons |
-
-
 ## 1. Actors
 ### 1.1 Overview
 Actors are programming concepts to model entities communicating via messages.
@@ -185,7 +179,7 @@ Upon finishing these requests, it should send a response to the sender's `/:resp
 ```
 
 ### 2.4 Event
-Periodically emit status event via `:event/status` (every 5s) (retained message).
+Periodically emit status event via `:event/status` (every 5s)
 
 For example:
 ```js

@@ -1,11 +1,11 @@
-Service Account
+Service Storage
 ===================
 
 # Overview
 
-This actor acts as a broker, being responsible for managing:
-- accounts in our system
-- related meta data for each account
+This actor acts as a storage, being responsible for managing:
+- entities in our system 
+- related meta data for each entitiy
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
@@ -13,14 +13,16 @@ It must conform `Actor Commons` (see more in `../actor-system.md`)
 Only `service/housekeeper`, `system`, `service/device-manager` can interact with this actor
 
 # A. ID
-The actor's local ID is: `service/account`
+The actor's local ID is: `service/storage`
 
 # B. Mailboxes
 The actor uses following mailboxes
 
-## 1. Requests
+## 1.  Common requests
 
 ### 1.1 Create
+
+Create a new entity
 
 **mailbox:** `:request/create`
 
@@ -68,11 +70,11 @@ The actor uses following mailboxes
 ```
 
 **note**
-- If there's any actor with such account, it will be overridden.
+- If there's any entity with such information, it will be overridden.
 
 ### 1.2 Update
 
-Update meta data for a specific actor
+Update meta data for a specific entity
 
 **mailbox:** `:request/update`
 
@@ -115,7 +117,7 @@ Update meta data for a specific actor
 
 **note** This request will override existing data.
 
-### 1.3 Get all actors
+### 1.3 Get all entities
 
 **mailbox:** `:request/get_all`
 
@@ -133,7 +135,7 @@ Update meta data for a specific actor
     // You may query via id patterns
     id: 'pattern'
     //id : 'device/*' -> for all devices
-    // id: 'services/*' -> for all services
+    // id: 'service/*' -> for all services
     // id: '*' -> for all
     // if no id pattern specified, by default pattern = '*'  
   }
@@ -153,14 +155,14 @@ Update meta data for a specific actor
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
-    actors: [
+    entities: [
       {} // ..
     ]
   }
 }
 ```
 
-### 1.4 Get information about a specific actor
+### 1.4 Get information about a specific entity
 
 **mailbox:** `:request/get`
 
@@ -192,14 +194,14 @@ Update meta data for a specific actor
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
-    actor: {
+    entity: {
       // list of key-value attributes (without passwords or token)
     }
   }
 }
 ```
 
-### 1.5 Get time series data for a specific actor
+### 1.5 Get time series data for a specific entity
 
 **mailbox:** `:request/get_data_series`
 
@@ -248,7 +250,7 @@ Update meta data for a specific actor
 }
 ```
 
-### 1.6 Remove an actor
+### 1.6 Remove an entity
 
 **mailbox:** `:request/remove`
 
@@ -284,8 +286,8 @@ Update meta data for a specific actor
 }
 ```
 
-### 1.7 List actors
-List all actors in our system
+### 1.7 List entities
+List all entities in our system
 
 **mailbox:** `:request/list`
 
@@ -321,8 +323,8 @@ List all actors in our system
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
-    actors:[
-      // list of actors's id
+    entities:[
+      // list of entities's id
     ]
   }
 }
@@ -331,4 +333,89 @@ List all actors in our system
 
 **note**
 - `service/#` can not be deleted via this request
-- any grants associated with the actor will be deleted as well.
+- any grants associated with the entity will be deleted as well.
+
+### 2. Health requests
+
+This requests are dedicated for service Doctor
+
+Only `service/doctor` is allowed to interact with these requests
+
+#### 2.1 Get all health records of entities
+
+**mailbox:** `:request/health/get_all`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    health: [ // list of available records
+      {
+        id, 
+        timestamp,
+        status
+      }
+    ]
+  }
+}
+```
+
+#### 2.2 Update health records for an entity
+
+**mailbox:** `:request/health/update`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    id, 
+    // any key-value else
+    // supposed to be: status, timestamp
+    // status = status.health.{unknown, alive, dead }
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
