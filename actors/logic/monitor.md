@@ -1,4 +1,4 @@
-Service Doctor
+Service Monitor
 ===================
 
 # Overview
@@ -9,7 +9,7 @@ This actor runs forever, monitoring system entities to see if they're healthy
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `service/doctor`
+The actor's local UID is: `service/monitor`
 
 # B. Mailboxes
 The actor uses following mailboxes

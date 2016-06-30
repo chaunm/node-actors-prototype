@@ -45,3 +45,14 @@ message = { message: "", from: "<cloud bridge>"}
 ```
 
 ## 2. Bridge events
+
+
+How system boot? 
+
+- Load meta file?
+Advantage: simple
+Disadvantage: dynamic actor must be persisted to disks
+
+- Load via database
+Advantage: all in database --> no need to 
+Disadvantage: 
