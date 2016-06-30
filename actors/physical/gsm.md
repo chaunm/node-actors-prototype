@@ -46,6 +46,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
   request, // the original request here
   response: {
     status: "status.{success, failure.*}",
+    delivered: <true, false> //message is successfully delivered or not
   }
 }
 ```
