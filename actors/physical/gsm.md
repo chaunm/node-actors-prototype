@@ -1,4 +1,4 @@
-Wifi Service
+GSM Service
 =======================
 
 
@@ -64,7 +64,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
   },
 
   params: { 
-    bumber: //phone number to make a call to
+    number: //phone number to make a call to
   }
 }
 ```
@@ -122,8 +122,24 @@ This mailbox contains response from other actors
   }
 }
 ```
+### 3.2 SMS delivered
 
-### 3.2 Call received
+**mailbox:** `:event/sms_delivered`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    to: //phone number of receiver
+  }
+}
+
+### 3.3 Call received
 
 **mailbox:** `:event/call_received`
 
@@ -141,7 +157,7 @@ This mailbox contains response from other actors
 }
 ```
 
-### 3.3 Gsm start
+### 3.4 Gsm start
 This message is sent to tell system that the gsm devices is properly started.
 **mailbox:** `:event/gsm_started`
 
@@ -158,7 +174,7 @@ This message is sent to tell system that the gsm devices is properly started.
   }
 }
 ```
-### 3.4 Gsm error
+### 3.5 Gsm error
 This message is sent to inform if there is any error with the gsm devices
 **mailbox:** `:event/gsm_error`
 
