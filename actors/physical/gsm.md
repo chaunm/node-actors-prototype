@@ -138,6 +138,7 @@ This mailbox contains response from other actors
     to: //phone number of receiver
   }
 }
+```
 
 ### 3.3 Call received
 
