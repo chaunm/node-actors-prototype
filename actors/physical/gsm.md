@@ -193,3 +193,21 @@ This message is sent to inform if there is any error with the gsm devices
   }
 }
 ```
+
+### 3.6 Billing report
+This message is sent to inform if there is any error with the gsm devices
+**mailbox:** `:event/billing_report`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    report: // billing report message received from *101# command
+  }
+}
+```
