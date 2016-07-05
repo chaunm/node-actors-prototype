@@ -211,3 +211,38 @@ This message is sent to inform if there is any error with the gsm devices
   }
 }
 ```
+### 3.7 Carrier report
+This message is sent to inform if there is any error with the gsm devices
+**mailbox:** `:event/carrier_report`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    carrier: <carrier name> // ex: VN VINAPHONE
+  }
+}
+```
+
+### 3.8 Rssi report
+This message is sent to inform if there is any error with the gsm devices
+**mailbox:** `:event/rssi_report`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    report: status.{no_signal,poor,fair,good,excellent} // signal strength status
+  }
+}
+```
