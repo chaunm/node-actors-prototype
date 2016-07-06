@@ -134,10 +134,10 @@ Update meta data for a specific entity
   params: {
     // You may query via id patterns
     id: 'pattern'
-    //id : 'device/*' -> for all devices
-    // id: 'service/*' -> for all services
-    // id: '*' -> for all
-    // if no id pattern specified, by default pattern = '*'  
+    //id : 'device/.*' -> for all devices
+    // id: 'service/.*' -> for all services
+    // id: '.*' -> for all
+    // if no id pattern specified, by default pattern = '.*'  
   }
 }
 ```
@@ -337,9 +337,9 @@ List all entities in our system
 
 ### 2. Health requests
 
-This requests are dedicated for service Doctor
+This requests are dedicated for service monitor
 
-Only `service/doctor` is allowed to interact with these requests
+Only `service/monitor` is allowed to interact with these requests
 
 #### 2.1 Get all health records of entities
 
@@ -419,3 +419,4 @@ Only `service/doctor` is allowed to interact with these requests
   }
 }
 ```
+

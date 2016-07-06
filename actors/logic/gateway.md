@@ -1,15 +1,19 @@
-Housekeeper
+Gateway
 ===================
 
 
 # Overview
 
-This actor acts as a housekeeper, being responsible for everything in our system. User actors only interact with this actors.
+This actor acts as a gateway for Users to interact with. 
+
+User actors can `only` interact with
+- `service/gateway`
+- `service/bonjour`
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # A. UID
-The actor's local UID is: `service/housekeeper`
+The actor's local UID is: `service/gateway`
 
 # B. Mailboxes
 The actor uses following mailboxes
