@@ -16,9 +16,13 @@ The actor's local UID is: `system`
 The actor uses following mailboxes
 
 ## 1. Requests
-### 1.1 xxx
+### 1.1 Finalize
 
-**mailbox:** `:request/xxx`
+Called by `service/bonjour` to finalize the initialization 
+
+This is a `tell` request.
+
+**mailbox:** `:request/finalize`
 
 **message:**
 
@@ -30,7 +34,16 @@ The actor uses following mailboxes
     timestamp
   },
 
-  xxx
+  params: {
+    owner: {
+      id,
+      token // raw
+    },
+    wifi: {
+      ssid,
+      password
+    }
+  }
 }
 ```
 

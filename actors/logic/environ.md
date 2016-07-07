@@ -1,9 +1,9 @@
-Service Storage
+Service Environ
 ===================
 
 # Overview
 
-This actor acts as a storage, being responsible for managing:
+This service acts as a storage, being responsible for managing:
 - entities in our system 
 - related meta data for each entitiy
 
@@ -13,7 +13,7 @@ It must conform `Actor Commons` (see more in `../actor-system.md`)
 Only `service/housekeeper`, `system`, `service/device-manager` can interact with this actor
 
 # A. ID
-The actor's local ID is: `service/storage`
+The actor's local ID is: `service/environ`
 
 # B. Mailboxes
 The actor uses following mailboxes

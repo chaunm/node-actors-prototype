@@ -86,7 +86,7 @@ The service uses following mailboxes
 		gsm : {
 			state: state.{connected, disconnected},
 			network: 'viettel',
-			signal: 'high | medium | low',
+			signal: signal.{poor, fair, good, excellent},
 			phoneNumber: '0987xyz',
 			balance: '1000 VND',
 			imei: 'xxxxx'
