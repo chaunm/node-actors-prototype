@@ -87,6 +87,45 @@ If we can't establish a connection with the target Wifi network, this Wifi servi
 **note**
 The timeout must be set to > 1 min
 
+### 1.3 Info
+
+**mailbox:** `:request/info`
+
+**message:**
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {
+    // left-blank
+  }
+}
+```
+
+**response**
+Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+```js
+{
+  from, // znp's guid, added by Message Broker automatically
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    state: "state.{connected, disconnected, broadcasting}",
+
+    // valid for state = connected
+    ssid,
+    ip
+
+    // valid for state = broadcasting
+    ssid
+  }
+}
+```
+
 ## 2. Response
 This mailbox contains response from other actors
 
@@ -123,7 +162,8 @@ This mailbox contains response from other actors
     timestamp
   },
   params: {
-    ssid
+    ssid,
+    ip
   }
 }
 ```

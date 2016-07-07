@@ -78,13 +78,13 @@ The service uses following mailboxes
       location,
       platform,
       uptime, 
-      status : {
+      state : {
       	battery: {
-			status: status.{charging, not_charging},
+			state: state.{charging, not_charging},
 			level: percent
       	},
 		gsm : {
-			status: status.{connected, disconnected},
+			state: state.{connected, disconnected},
 			network: 'viettel',
 			signal: 'high | medium | low',
 			phoneNumber: '0987xyz',
@@ -92,7 +92,7 @@ The service uses following mailboxes
 			imei: 'xxxxx'
 		},
 		wifi: {
-			status: status.{connected, disconnected, broadcasting},
+			state: state.{connected, disconnected, broadcasting},
 			network: 'xyz.com',
 			ip
 		}
