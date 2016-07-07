@@ -94,6 +94,24 @@ Update meta data for a specific entity
     // other dedicated keys:
     // data: [object] for storing data
     // permissions: {rules} for storing ACLs
+    // keys may be separated by dots to indicate sub-objects
+    // For example, with key ='time.year', value = 2016
+    // we will have `{ time: { year: 2016 } }` inside the updated record
+
+    // optionally, to remove key-value pairs by keys, 
+    // you may use `$unset`, for example:
+    // $unset: "data.value" 
+    // or
+    // $unset : [ "data.value", "platform.os"]
+
+    // optionally, you may decide to remove completely the record (excluding _id & id)
+    // with a new one by using $replace
+    // $replace: {
+    //  // any key-value 
+    // }
+
+    // both $unset and $replace can be used simultaneously in a request 
+    // in that case, $replace will have a higher precedence
   }
 }
 ```
@@ -138,6 +156,13 @@ Update meta data for a specific entity
     // id: 'service/.*' -> for all services
     // id: '.*' -> for all
     // if no id pattern specified, by default pattern = '.*'  
+
+    // and optionally a key to restrict returned fields
+    $fields
+    // for example, to return only field 'configuration.grant', you may set
+    // $fields: 'configuration.grant'
+    // you can also set multiple fields 
+    // $fields: [ 'configuration', 'platform' ]
   }
 }
 ```
@@ -177,6 +202,13 @@ Update meta data for a specific entity
   },
   params:{
     id, // id of account to get
+
+    // and optionally a key to restrict returned fields
+    $fields
+    // for example, to return only field 'configuration.grant', you may set
+    // $fields: 'configuration.grant'
+    // you can also set multiple fields 
+    // $fields: [ 'configuration', 'platform' ]
   }
 }
 ```
