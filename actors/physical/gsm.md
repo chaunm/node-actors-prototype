@@ -160,7 +160,7 @@ This mailbox contains response from other actors
 ```
 
 ### 3.4 Gsm start
-This message is sent to tell system that the gsm devices is properly started.
+This message is sent to tell system if the gsm devices is properly started.
 **mailbox:** `:event/gsm_started`
 
 **message**: messages should conform the format
@@ -172,7 +172,7 @@ This message is sent to tell system that the gsm devices is properly started.
     timestamp
   },
   params: {
-    
+    status: "status.{success, failure}"
   }
 }
 ```
@@ -195,7 +195,7 @@ This message is sent to inform if there is any error with the gsm devices
 ```
 
 ### 3.6 Billing report
-This message is sent to inform if there is any error with the gsm devices
+This message is sent to inform the billing message received from operator
 **mailbox:** `:event/billing_report`
 
 **message**: messages should conform the format
@@ -212,7 +212,7 @@ This message is sent to inform if there is any error with the gsm devices
 }
 ```
 ### 3.7 Carrier report
-This message is sent to inform if there is any error with the gsm devices
+This message is sent to report about carrier and signal status
 **mailbox:** `:event/carrier_report`
 
 **message**: messages should conform the format
@@ -224,25 +224,9 @@ This message is sent to inform if there is any error with the gsm devices
     timestamp
   },
   params: {
+    number: <phone number in string> 	//some operator doesn't support getting phone number from sim 
+    					//so this field can be ommitted
     carrier: <carrier name> // ex: VN VINAPHONE
+    rssi: "status.{no_signal, poor, fair, good, excellent}"
   }
 }
-```
-
-### 3.8 Rssi report
-This message is sent to inform if there is any error with the gsm devices
-**mailbox:** `:event/rssi_report`
-
-**message**: messages should conform the format
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
-    report: status.{no_signal,poor,fair,good,excellent} // signal strength status
-  }
-}
-```
