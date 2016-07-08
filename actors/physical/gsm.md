@@ -196,6 +196,7 @@ This message is sent to inform if there is any error with the gsm devices
 
 ### 3.6 Billing report
 This message is sent to inform the billing message received from operator
+
 **mailbox:** `:event/billing_report`
 
 **message**: messages should conform the format
