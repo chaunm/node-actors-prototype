@@ -161,6 +161,7 @@ This mailbox contains response from other actors
 
 ### 3.4 Gsm start
 This message is sent to tell system if the gsm devices is properly started.
+
 **mailbox:** `:event/gsm_started`
 
 **message**: messages should conform the format
@@ -178,6 +179,7 @@ This message is sent to tell system if the gsm devices is properly started.
 ```
 ### 3.5 Gsm error
 This message is sent to inform if there is any error with the gsm devices
+
 **mailbox:** `:event/gsm_error`
 
 **message**: messages should conform the format
@@ -189,7 +191,7 @@ This message is sent to inform if there is any error with the gsm devices
     timestamp
   },
   params: {
-    error: //eror code
+    error: error.{command.timeout, command.error, start.failure}"
   }
 }
 ```
@@ -214,6 +216,7 @@ This message is sent to inform the billing message received from operator
 ```
 ### 3.7 Carrier report
 This message is sent to report about carrier and signal status
+
 **mailbox:** `:event/carrier_report`
 
 **message**: messages should conform the format
