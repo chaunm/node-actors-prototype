@@ -10,7 +10,8 @@ This service acts as a storage, being responsible for managing:
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 **Security** 
-Only `service/housekeeper`, `system`, `service/device-manager` can interact with this actor
+- Only `service/gateway`, `system`, `service/device-manager` can modify information of another service
+- Services can modify their records themselves.
 
 # A. ID
 The actor's local ID is: `service/environ`
@@ -110,9 +111,47 @@ Update meta data for a specific entity
     //  // any key-value 
     // }
 
-    // both $unset and $replace can be used simultaneously in a request 
-    // in that case, $replace will have a higher precedence
-  }
+    // NOTE #1:
+    // If $replace is found in requests, Environ will omit other fields
+    // For example: with params = {
+    //    id: 'service/dummy',
+    //    $unset: ['data.value'],
+    //    'data.value': 3,
+    //    $replace: {
+    //      'data.platform': 'tinos'
+    //    }
+    // }
+    // The final record will be: 
+    //  { 
+    //    _id,
+    //    id,
+    //    data: {
+    //      platform: 'tinos'
+    //    }
+    //  }
+
+    // NOTE #2:
+    // If $unset is used without $replace, Environ will unset the fields, 
+    // and then upserting the other fields.
+    // For example: with params =
+    // {
+    //    id,
+    //    'platform.value' : 3,
+    //    $unset : 'data.platform'
+    // }  
+    // Environ will unset 'data.platform' first, updating other fields then.
+
+    // NOTE 3: Unset permissions
+    // You may use $unset to remove permissions. Here are the keys to use with $unset
+    // - 'permissions': to remove any permissions granted
+    // - 'permissions.pubsub': to remove any pubsub granted
+    // - 'permissions.publish': to remove any publication granted
+    // - 'permissions.subscribe': to remove any publication granted
+
+    // NOTE 4: Unset `data` fields
+    // You may use $unset to remove `data` fields. Here are the keys:
+    // - 'data': to remove any field in `data`
+    // - `data.xxx`: to remove a specific field
 }
 ```
 
