@@ -7,7 +7,7 @@ ZNP Service
 This actor works with ZNP devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # UID
-The actor's local UID is: `service/znp`
+The actor's local UID is: `service/zigbee`
 
 # Mailboxes
 

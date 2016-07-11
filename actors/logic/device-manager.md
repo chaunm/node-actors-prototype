@@ -5,7 +5,7 @@ Device Manager Service
 This actor acts as a device manager, listening for all device-related events
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
-Currently, only `service/znp` is supported.
+Currently, only `service/zigbee` is supported.
 
 This actor only works with `service/housekeeper`, `system`.
 
@@ -19,13 +19,13 @@ This service's responsible for following things:
 **On runtime**
 - Store information about devices (in Redis)
 - Create new devices (if there's no such device in our database)
-- Relay data events to associated devices. That is: `znp -> device-manager -> device`
+- Relay data events to associated devices. That is: `zigbee -> device-manager -> device`
 
 # A. ID
 The actor's local ID is: `service/device-manager`
 
 # B. External mailboxes
-Subscribes to `service/znp/:event/#`
+Subscribes to `service/zigbee/:event/#`
 
 # C. Owned mailboxes
 
