@@ -74,7 +74,11 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
 ```js
 {
-	from, // znp's guid, added by Message Broker automatically
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
   request, // the original request here
   response: {
     status: "status.{success, failure.*}"  
@@ -85,7 +89,7 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 ## 2. Response
 This mailbox contains response from other actors
 
-**mailbox:** `response`
+**mailbox:** `:response`
 
 **message:**  messages should conform the format:
 ```js
