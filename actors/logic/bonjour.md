@@ -19,8 +19,6 @@ It's responsible for:
 		- Updating information about the owner & wifi information
 		- Removing Anonymous user 
 		- Mark itself as initialized
-		- Ask the system to reboot
-	- Kill itself
 
 - Otherwise, rebroadcasting itself
 
@@ -104,9 +102,10 @@ The service uses following mailboxes
 
 ### 1.2 Setup 
 
-This is a `tell` request
+This is a `tell` request. We only process this request when the internal state is `state.initializing`
 
-**mailbox:** `request/setup`
+
+**mailbox:** `:request/setup`
 
 **message:**
 
@@ -127,6 +126,46 @@ This is a `tell` request
     	ssid,
     	password
     }
+  }
+}
+```
+
+### 1.3 Initialize
+Ask `service/bonjour` to broadcast a Wi-Fi network, accepting setup requests
+
+Only accepts requests from `system` if the internal state is not `state.initializing`
+
+**mailbox:** `:request/init`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: { // blank
+  }
+}
+```
+
+**response** 
+
+Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    // failure may be invalid_state, unauthorized
   }
 }
 ```

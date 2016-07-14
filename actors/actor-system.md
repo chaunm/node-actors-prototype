@@ -202,7 +202,7 @@ Actor system contains 3 layers and boot in order
 - Validator: validate all components
 - LED controllers
 - Message broker: eMQTT
-- Database (redis)
+- Database (mongodb)
 - ActorUp: activates all actors
 
 2. Actors: executable programs in any programming language

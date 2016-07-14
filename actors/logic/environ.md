@@ -21,63 +21,11 @@ The actor uses following mailboxes
 
 ## 1.  Common requests
 
-### 1.1 Create
+### 1.1 Set
 
-Create a new entity
+Update/create meta data for a specific entity
 
-**mailbox:** `:request/create`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    id,
-    token, //may be pre-hashed with sha256
-    class, // class.service, class.device.*, class.user.{guest, admin}
-    permissions: {
-      publish: [], // publish only
-      subscribe: [], // subscribe only
-      pubsub: [] // both publish & subscribe
-    },
-    // any key-value else
-    // dedicated fields including:
-    // data: object for storing device data 
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}"
-  }
-}
-```
-
-**note**
-- If there's any entity with such information, it will be overridden.
-
-### 1.2 Update
-
-Update meta data for a specific entity
-
-**mailbox:** `:request/update`
+**mailbox:** `:request/set`
 
 **message:**
 
@@ -93,8 +41,15 @@ Update meta data for a specific entity
     id, // id of account to update
     // any key-value else
     // other dedicated keys:
-    // data: [object] for storing data
+    // data: {object} for storing data
     // permissions: {rules} for storing ACLs
+    // class, // class.service, class.device.*, class.user.{guest, admin}
+    // For example:
+    // permissions: {
+    //   publish: [], // publish only
+    //   subscribe: [], // subscribe only
+    //   pubsub: [] // both publish & subscribe
+    // },
     // keys may be separated by dots to indicate sub-objects
     // For example, with key ='time.year', value = 2016
     // we will have `{ time: { year: 2016 } }` inside the updated record
@@ -174,7 +129,7 @@ Update meta data for a specific entity
 
 **note** This request will override existing data.
 
-### 1.3 Get all entities
+### 1.2 Get all entities
 
 **mailbox:** `:request/get_all`
 
@@ -226,7 +181,7 @@ Update meta data for a specific entity
 }
 ```
 
-### 1.4 Get information about a specific entity
+### 1.3 Get information about a specific entity
 
 **mailbox:** `:request/get`
 
@@ -272,7 +227,7 @@ Update meta data for a specific entity
 }
 ```
 
-### 1.5 Get time series data for a specific entity
+### 1.4 Get time series data for a specific entity
 
 **mailbox:** `:request/get_data_series`
 
@@ -321,7 +276,7 @@ Update meta data for a specific entity
 }
 ```
 
-### 1.6 Remove an entity
+### 1.5 Remove an entity
 
 **mailbox:** `:request/remove`
 
@@ -357,7 +312,7 @@ Update meta data for a specific entity
 }
 ```
 
-### 1.7 List entities
+### 1.6 List entities
 List all entities in our system
 
 **mailbox:** `:request/list`

@@ -9,7 +9,77 @@ This actor acts as the core system, being responsible for:
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
 
-# A. UID
+**How Gateway boots up?**
+Execute boot scripts at `/boot`. It performs following things:
+- Patch registry
+- Start Environ
+- Start System
+
+**How System starts?**
+- System checks if it's initialized (via the presence of `owner` field)
+- If it's initialized, boots as normal
+- Otherwise:
+  + Create Anonymous user
+  + Start Bonjour service
+  + Waiting for `finalize` calls from `service/bonjour`
+- If `finalize` is invoked:
+  + Writing wifi configuration, owner
+  + Boot as normal
+
+**System record**
+
+An example record may be:
+
+```js
+ system: {
+    id,
+    token, // hash 
+    name: 'Evolas I',
+    model: 'EVO68',
+    owner, // id of the owner (user/xxx)
+    platform: 'evolas system',
+    version: '1.0',
+    releaseDate: 'Jul 14 2016',
+    time: {
+      up, // system up time
+      now, // current time of system, updated every minutes
+      initialized // time at which the system initialized
+    }, 
+    configuration: {
+      boot: [
+        // list of services to boot (in order)
+      ],
+      grant: [
+        // list of IDs having modification rights
+      ],
+      wifi: {
+        password,
+        security: security.{none, wep, wpa/wpa2}
+      }
+    },
+    state : {
+      battery: {
+      state: state.{charging, not_charging},
+      level: percent
+    },
+    gsm : {
+      state: state.{connected, disconnected},
+      network: 'viettel',
+      signal: signal.{poor, fair, good, excellent},
+      phoneNumber: '0987xyz',
+      balance: '1000 VND',
+      imei: 'xxxxx'
+    },
+    wifi: {
+      state: state.{connected, disconnected, broadcasting},
+      network: 'xyz.com',
+      ip
+    }
+  }
+}
+```
+
+# A. ID
 The actor's local UID is: `system`
 
 # B. Mailboxes
