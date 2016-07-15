@@ -87,9 +87,10 @@ If we can't establish a connection with the target Wifi network, this Wifi servi
 **note**
 The timeout must be set to > 1 min
 
-### 1.3 Info
+### 1.3 Hi
+Get information about the Wi-Fi network
 
-**mailbox:** `:request/info`
+**mailbox:** `:request/hi`
 
 **message:**
 ```javascript
