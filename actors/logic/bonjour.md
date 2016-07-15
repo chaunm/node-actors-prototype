@@ -12,7 +12,6 @@ It's responsible for:
 	Configuration request must contain: 
 		wifi { ssid, password }
 		owner { id, token }
-	The request is a `tell` one
 
 - If success:
 	- Ask the system to finalize by:
@@ -39,7 +38,7 @@ The service uses following mailboxes
 ## 1. Requests
 ### 1.1 Get information about the system
 
-**mailbox:** `request/info`
+**mailbox:** `request/hi`
 
 **message:**
 
@@ -101,9 +100,11 @@ The service uses following mailboxes
 ```
 
 ### 1.2 Setup 
+We only process this request when the internal state is `state.initializing`
 
-This is a `tell` request. We only process this request when the internal state is `state.initializing`
+A success response is just to let `Anonymous` know that: the params is ok. 
 
+The requester then should re-connect back to the home network wifi, discovering the presence of gateway (in 3 minutes timeout )
 
 **mailbox:** `:request/setup`
 

@@ -90,8 +90,6 @@ The actor uses following mailboxes
 
 Called by `service/bonjour` to finalize the initialization 
 
-This is a `tell` request.
-
 **mailbox:** `:request/finalize`
 
 **message:**
@@ -116,6 +114,138 @@ This is a `tell` request.
   }
 }
 ```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
+
+### 1.2 Hi
+
+Get information about `system`. No restriction on ACL.
+
+**mailbox:** `:request/hi`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: { // blanks
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    system: {
+      id,
+      token, // hash 
+      name: 'Evolas I',
+      model: 'EVO68',
+      owner, // id of the owner (user/xxx)
+      platform: 'evolas system',
+      version: '1.0',
+      releaseDate: 'Jul 14 2016',
+      time: {
+        up, // system up time
+        now, // current time of system, updated every minutes
+        initialized // time at which the system initialized
+      }, 
+      // configuration information is removed ....
+      state : {
+        battery: {
+        state: state.{charging, not_charging},
+        level: percent
+      },
+      gsm : {
+        state: state.{connected, disconnected},
+        network: 'viettel',
+        signal: signal.{poor, fair, good, excellent},
+        phoneNumber: '0987xyz',
+        balance: '1000 VND',
+        imei: 'xxxxx'
+      },
+      wifi: {
+        state: state.{connected, disconnected, broadcasting},
+        network: 'xyz.com',
+        ip
+      }
+    }
+    } 
+  }
+}
+```
+
+### 1.3 Reset
+Reset the whole system by:
+- forgeting Wi-Fi
+- removing data in `mqtt_data`, `mqtt_health`
+- removing any time series data
+- removing `user/.*` in `mqtt_entity`
+- removing `system.owner`, `time.initialized`
+
+**mailbox:** `:request/reset`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: { // blanks
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
+
+Only accepts requests from the owner (or a system service)
 
 ## 2. Response
 
