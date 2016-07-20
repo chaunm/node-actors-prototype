@@ -24,7 +24,9 @@ For serving requests from other actors
     timestamp
   },
   params: {
-    color: "color.{red, green, orange}"
+    red: < 0 - 255 >
+    green: < 0 - 255 >
+    blue: < 0 - 255 >
   }
 }
 ```
@@ -93,7 +95,9 @@ For serving requests from other actors
     timestamp
   },
   params: {
-    color: "color.{red, green, orange}",
+    red: <0 - 255 >
+    green: < 0 - 255 >
+    blue: < 0 - 255 >
     freq : "int, cycle count per second (Hz)"
   }
   id: <add by sender for callback processing when receive response message>
