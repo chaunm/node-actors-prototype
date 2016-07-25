@@ -98,7 +98,7 @@ For serving requests from other actors
     red: <0 - 255 >
     green: < 0 - 255 >
     blue: < 0 - 255 >
-    freq : "int, cycle count per second (Hz)"
+    period: "int, time for a blinking cycle in mss"
   }
   id: <add by sender for callback processing when receive response message>
 }
@@ -140,5 +140,6 @@ This service is an actuator and generate no request to other actors.
   params: {
     color: "color.{red, green, orange}",
     state : "state.{on,off,blinking}"
+    period: <period for 1 blinking cycle in ms (only valid in blinking mode)>
   }  
 ```
