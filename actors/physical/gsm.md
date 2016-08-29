@@ -86,6 +86,46 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 }
 ```
 
+### 1.3 Hi
+
+Get information about GSM interfaces
+
+**mailbox:** `:request/hi`
+
+**message:**
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+
+  params: {   }
+}
+```
+
+**response**
+Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}",
+    state: state.{connected, disconnected},
+    network: 'viettel',
+    signal: signal.{poor, fair, good, excellent},
+    phoneNumber: '0987xyz',
+    balance: '1000 VND'    
+  }
+}
+```
+
 ## 2. Response
 This mailbox contains response from other actors
 
