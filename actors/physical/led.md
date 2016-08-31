@@ -100,7 +100,6 @@ For serving requests from other actors
     blue: < 0 - 255 >
     period: "int, time for a blinking cycle in mss"
   }
-  id: <add by sender for callback processing when receive response message>
 }
 ```
 
