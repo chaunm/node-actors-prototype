@@ -171,6 +171,7 @@ Watson will then emit the event into the stream after injecting field `origin` i
     status: "status.{success, failure.*}"
   }
 }
+```
 
 **note**
 - If there's no such thing with id =  `meta.id`, returns `status.failure.no_such_id`
@@ -286,6 +287,7 @@ Query information about things
   }
 }
 ```
+
 **response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
@@ -322,6 +324,7 @@ Ask a specific device to do something
   }
 }
 ```
+
 **response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
 ```js
