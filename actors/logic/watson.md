@@ -406,7 +406,7 @@ If `free` is used, it will supersede `set`, `unset`, releasing the context
 
 Fetch context of  a specific thing
 
-**mailbox:** `:request/thing_context_fetch`
+**mailbox:** `:request/world_context_fetch`
 
 **message:**
 
