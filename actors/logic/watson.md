@@ -102,8 +102,10 @@ Unregister a registered thing
     status: "status.{success, failure.*}"
   }
 }
+```
 
 **note**
+
 - If there's no such thing with id =  `meta.id`, returns `status.failure.no_such_id`
 - Only things' parents can invoke this request. Otherwise, it will return `statue.failure.unauthorized`.
 
