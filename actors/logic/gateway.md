@@ -199,8 +199,7 @@ The requester then should re-connect back to the home network wifi, discovering 
 
   params: {
     owner: {
-    	id,
-    	token
+    	id
     },
     wifi: {
     	ssid,

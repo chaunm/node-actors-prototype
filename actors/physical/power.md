@@ -30,7 +30,7 @@ The actor uses following mailboxes
   response: {
       status: "status.{success, failure}",
       "blackout": "true or false. true if there's a electric power outage",
-      "blackoutTime": "time in second at which the outage happens",
+      "blackoutTime": "Unix timestamp at which the outage happens",
       "durationTime": "time in second that the system can work by using battery",
       "elapsedTime": "elapsed time in second since there's a blackout"
   }

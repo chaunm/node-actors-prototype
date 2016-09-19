@@ -85,7 +85,7 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 If we can't establish a connection with the target Wifi network, this Wifi service will automatically re-broadcast.
 
 **note**
-The timeout must be set to > 1 min
+The timeout must be set to > 3 min
 
 ### 1.3 Hi
 Get information about the Wi-Fi network

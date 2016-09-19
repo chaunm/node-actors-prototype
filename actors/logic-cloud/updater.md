@@ -66,7 +66,7 @@ Whenever Evolas System has an update:
 
 Updates are ZIP files protected by keys = gateway id + token hash (join)
 
-Updates are then splitted into smaller, base64-encoded 64K chunks
+Updates are then splitted into smaller, base64-encoded 32KB chunks
 
 The download processes have 2 steps:
 - `download/init`: Ask the service to initialize the processes. (protected zip -> 64k splits -> bases64 encoded -> store in Mongodb with predefined expiration time of 12 hours )

@@ -92,3 +92,43 @@ Endpoint for in-house gateways to register themselves before being put into the 
   }
 }
 ```
+
+### 1.3 Verification
+
+Verify if an entity exists
+
+**mailbox:** `:request/verify`
+
+**message:**
+
+```javascript
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    ip,
+    port,
+    timestamp
+  },
+
+  params: {
+    id,
+    token // hashed
+  }
+}
+```
+
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    timestamp
+  },
+  request, // the original request here
+  response: {
+    status: "status.{success, failure.*}"
+  }
+}
+```
