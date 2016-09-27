@@ -29,7 +29,8 @@ For serving requests from other actors
 
   params: {
     song: "<path of mp3 file>",
-    repeat: <yes/no>
+    repeat: <yes/no> <in case of missing, default play once>
+    repeatTime: <times of repeat, 0 mean infinite>
   }
 }
 ```
