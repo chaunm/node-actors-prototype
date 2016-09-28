@@ -51,9 +51,9 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 }
 ```
 
-### 1.2 Stop playig
+### 1.2 Stop playing
 
-**mailbox:** `:request/stop`
+**mailbox:** `:request/stop_playing`
 
 **message:**
 ```javascript
