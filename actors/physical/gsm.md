@@ -221,7 +221,7 @@ This message is sent to tell system if the gsm device is properly started.
   }
 }
 
-In case of there's any error occurs in the starting process, there will be an error message sent to /event/gsm_error topic.
+In case of there is any error occurs in the starting process, there will be an error message sent to /event/gsm_error topic.
 
 ```
 ### 3.5 Gsm error
@@ -243,6 +243,7 @@ This message is sent to inform if there is any error with the gsm devices
   }
 }
 ```
+
 A command timeout event received means that communication between host and the gsm device failed.
 
 ### 3.6 Billing report
