@@ -19,6 +19,10 @@ This service is an actuator and generate no request to other actors.
 
 #### 3.1 Button event
 
+This event generate when push the button:
+- Press and hold button for more than 1 second and less than 3 seconds then release, event reset_wifi will be generated.
+- Press adn hold button for more than 3 seconds then release, event reset will be generated (factory reset).
+
 **mailbox:** `:event/button_event`
 
 **message:** messages should conform the format
@@ -29,6 +33,6 @@ This service is an actuator and generate no request to other actors.
     timestamp
   },
   params: {
-    "event" : "event create by button", <ex: event.reset, event.add_device>
+    "event" : "event create by button", <ex: event.reset, event.reset_wifi>
   }  
 ```
