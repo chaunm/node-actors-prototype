@@ -176,7 +176,9 @@ This mailbox contains response from other actors
 
 This event is generated when system get a message from devices update link quality of those devices.
 The value may have value of:
+
   0 - signal is weak
+  
   1 - signal is fair enough
   
 **mailbox:** `:event/device_signal`
