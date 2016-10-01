@@ -127,6 +127,7 @@ In the params sector, beside macId information is all the endpoint information c
   },
   params:{
     macId: <mac Id of the device>,
+    protocol: "zigbee",
     endpoints: < array of endpoint information
     [ 
       //array of endpoint(s) information
@@ -134,7 +135,7 @@ In the params sector, beside macId information is all the endpoint information c
       endpoint,
       // class.device.sensor.{motion, humidity, door, fire}, class.device.keyfob.{panic, remote}
       class,
-      protocol: "zigbee",
+     
       // any key-value else
       }
       ...
