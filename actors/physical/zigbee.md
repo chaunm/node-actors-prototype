@@ -169,6 +169,32 @@ This mailbox contains response from other actors
     error: "error.device.code" // code describing the error (if any)  
   }
 }
+
+```
+
+### 3.3 Device's signal strength
+
+This event is generated when system get a message from devices update link quality of those devices.
+The value may have value of:
+  0 - signal is weak
+  1 - signal is fair enough
+  
+**mailbox:** `:event/device_signal`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    macId,
+    protocol: "zigbee",
+    signal_strength: <0, 1>
+  }
+}
 ```
 
 ### 3.4 Device is offline
