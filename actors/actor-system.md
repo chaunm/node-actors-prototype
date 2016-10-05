@@ -2,15 +2,12 @@ Aktor v2.0
 ===============
 
 ## 1. Aktors
-
 ### 1.1 Overview
 
 Aktors are programming concepts to model entities communicating via messages.
 + Can be implemented in any programming language
 + Have their own endpoints which are authorized topics on a message broker.
 + Can be featured via an ID (locally or globally)
-
-This specification is not fully compatible with Aktor v1.0
 
 ### 1.2 Endpoints
 An endpoint is an MQTT topic can be configured to subscribe or publish messages
@@ -125,7 +122,7 @@ descriptor = {
 }
 ```
 
-- Manifest itself by telling `event/service/world/manifest/<id>` with `status` = `status.{online, offline}`. If `status` = `status.online`, it optionally provide its descriptors:
+- Manifest itself by telling `event/service/world/manifest` with `status` = `status.{online, offline}`. If `status` = `status.online`, it optionally provide its descriptors:
 
 ```js
 var message = {
@@ -138,7 +135,7 @@ var message = {
   }
 }
 
-thing.tell('event/service/world/manifest/id', message, callback)
+thing.tell('event/service/world/manifest', message, callback)
 ```
 
 - Register/unregister its instances by invoking `action/service/world/register`, `action/service/world/unregister`
