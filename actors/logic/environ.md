@@ -1,448 +1,408 @@
-Service Environ
-===================
+Specifications for EnvironService (v1.3)
+===============
 
-# Overview
 
-This service acts as a storage, being responsible for managing:
-- entities in our system 
-- related meta data for each entitiy
+### 1. Overview
 
-It must conform `Actor Commons` (see more in `../actor-system.md`)
+- Environ is where our aktors hosted, providing environment for aktors to live
+- Environ comprises of multiple containers running on independent processes
+- Environ is implemented as a CommonAktor
+- Environ only supports CommonAktors. We will refer to `CommonAktors` as aktors from now on
 
-**Security** 
-- Only `service/gateway`, `system`, `service/device-manager` can modify information of another service
-- Services can modify their records themselves.
+### 2. Specifications
 
-# A. ID
-The actor's local ID is: `service/environ`
+#### 2.1 Resilience
 
-# B. Mailboxes
-The actor uses following mailboxes
+Environ will run in a dedicated process which is monitored by PM2.
 
-## 1.  Common requests
+It's capable of dealing with unexpected exceptions by restoring most recent sessions which contains running aktors
 
-### 1.1 Set
+Bad aktors (which cause unexpected things > 3 times) will be destroyed from the containers.
 
-Update/create meta data for a specific entity
+#### 2.2 Boot
 
-**mailbox:** `:request/set`
+Check for platform services before entering any further stage. Platform services include:
+- eMQTT
+- MongoDb
+- InfluxDb
+- Parse
 
-**message:**
+#### 2.3 Self initialization
 
-```javascript
+Environ will initialize itself only for the first time it's started.
+
+No configuration is needed
+
+The initialization works as follow:
+- get platform configuration
+- get core services (which are CommonAktors) and generate configurations for them
+- start them sequentially in the order
+
+**NOTE**:
+- Platform configuration may contain field `clean = true` to trigger the initialization every time Environ starts
+
+#### 2.4 Containers
+
+Environ uses multiple containers to host aktors.
+Containers are actually independent processes managed by PM2.
+
+#### 2.5 Responsibilities
+
+To aktorks, Environ's responsible for:
+
+**Starting**
+- Generating appropriate configurations: an MqttInterface named `local`, a ParseStorage named `local`, a TimeSeriesStorage named `timeseries`
+- Starting aktors
+- Aktors are featuring via IDs. There's no aktors having the same ID allowed to run.
+- Parent aktors are aktors requesting to create another aktors (which are child ones) . Environ has no parent by itself.
+- Aktors can be implemented in any programming languages as long as they conform CommonAktor specifications.
+
+**Monitoring**
+- Monitoring and restarting faulty aktors if there's any unhandled exceptions
+- Preventing faulty aktors committing to much restarts from starting/running
+
+**Destroying**
+- Only parent aktors can stop/remove their child aktors.
+- Bad aktors are automatically destroyed
+- Environ can stop any aktors (for example when upgrading the entire system)
+- Aktors can kill themselves ( by `tell`ing Environ to stop them. If not, aktors may be resurrect by PM2)
+
+**Preserving**
+- Environ stores configuration for aktors to start
+- Data stored by aktors will be deleted only when the aktors are destroyed.
+
+**Security**
+- Generate tokens for aktors to access platform services
+
+### 3. Interface
+
+- id: `service/environ`
+
+- requests:
+    - `:request/aktor_start`: Launch an aktor
+    - `:request/aktor_stop`: Stop an aktor (stop but not destroy)
+    - `:request/aktor_destroy`: Remove an aktor from the environment
+    - `:request/aktor_get`: Get information about hosted aktors
+    - `:request/stop`: Stop the container
+    - `:request/environ_get`: Get configurations for Environ
+    - `:request/environ_set`: Set configurations for Environ
+
+- events:
+    - `:event/aktor_faulty`: A faulty aktor detected
+    - `:event/status`: Status events
+
+- subscriptions:
+    - `service/container/+/:event/container_started`
+    - `service/container/+/:event/aktor_started`: To handle restarting-events of containers
+    - `service/container/+/:event/container_stopped`
+    - `service/container/+/:event/aktor_stopped`
+    - `service/container/+/:event/aktor_faulty`
+
+#### 3.1. Requests
+
+##### 3.1.1. Start an aktor
+
+Support nodejs and non-nodejs aktor
+
+**endpoint** `:request/aktor_start`
+
+**message**:
+
+```js
 {
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
+  header, // added by our custom broker
   params: {
-    id, // id of account to update
-    // any key-value else
-    // other dedicated keys:
-    // data: {object} for storing data
-    // permissions: {rules} for storing ACLs
-    // class, // class.service, class.device.*, class.user.{guest, admin}
-    // For example:
-    // permissions: {
-    //   publish: [], // publish only
-    //   subscribe: [], // subscribe only
-    //   pubsub: [] // both publish & subscribe
-    // },
-    // keys may be separated by dots to indicate sub-objects
-    // For example, with key ='time.year', value = 2016
-    // we will have `{ time: { year: 2016 } }` inside the updated record
+    script, // required, absolute path to nodejs aktor scripts or other binaries
+    maxRestarts ,  // optional, default 3, the maximum number of times in a row a script will be restarted      
+    id, // required
+    timeout, // time (in ms) to wait for aktors to start. Optional, defaul 10000 ms (10s)
+    token, // token may be omitted. If none's provided, an random one will be used.
+    //... other options      
+  }
 
-    // optionally, to remove key-value pairs by keys, 
-    // you may use `$unset`, for example:
-    // $unset: "data.value" 
-    // or
-    // $unset : [ "data.value", "platform.os"]
-
-    // optionally, you may decide to remove completely the record (excluding _id & id)
-    // with a new one by using $replace
-    // $replace: {
-    //  // any key-value 
-    // }
-
-    // NOTE #1:
-    // If $replace is found in requests, Environ will omit other fields
-    // For example: with params = {
-    //    id: 'service/dummy',
-    //    $unset: ['data.value'],
-    //    'data.value': 3,
-    //    $replace: {
-    //      'data.platform': 'tinos'
-    //    }
-    // }
-    // The final record will be: 
-    //  { 
-    //    _id,
-    //    id,
-    //    data: {
-    //      platform: 'tinos'
-    //    }
-    //  }
-
-    // NOTE #2:
-    // If $unset is used without $replace, Environ will unset the fields, 
-    // and then upserting the other fields.
-    // For example: with params =
-    // {
-    //    id,
-    //    'platform.value' : 3,
-    //    $unset : 'data.platform'
-    // }  
-    // Environ will unset 'data.platform' first, updating other fields then.
-
-    // NOTE 3: Unset permissions
-    // You may use $unset to remove permissions. Here are the keys to use with $unset
-    // - 'permissions': to remove any permissions granted
-    // - 'permissions.pubsub': to remove any pubsub granted
-    // - 'permissions.publish': to remove any publication granted
-    // - 'permissions.subscribe': to remove any publication granted
-
-    // NOTE 4: Unset `data` fields
-    // You may use $unset to remove `data` fields. Here are the keys:
-    // - 'data': to remove any field in `data`
-    // - `data.xxx`: to remove a specific field
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response**
 
 ```js
 {
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  request, // the original request here
+  header,
+  request,
   response: {
-    status: "status.{success, failure.*}"
+    status: 'status.{failure, success}'
   }
 }
 ```
 
-**note** This request will override existing data.
+Returns `failure` if:
+- Aktor can NOT start successfully (exceptions or timeouts)
+- Any aktor with the same id running
 
-### 1.2 Get all entities
-
-**mailbox:** `:request/get_all`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  params: {
-    // You may query via id patterns
-    id: 'pattern'
-    //id : 'device/.*' -> for all devices
-    // id: 'service/.*' -> for all services
-    // id: '.*' -> for all
-    // if no id pattern specified, by default pattern = '.*'  
-
-    // and optionally a key to restrict returned fields
-    $fields
-    // for example, to return only field 'configuration.grant', you may set
-    // $fields: 'configuration.grant'
-    // you can also set multiple fields 
-    // $fields: [ 'configuration', 'platform' ]
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    entities: [
-      {} // ..
-    ]
-  }
-}
-```
-
-### 1.3 Get information about a specific entity
-
-**mailbox:** `:request/get`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params:{
-    id, // id of account to get
-
-    // and optionally a key to restrict returned fields
-    $fields
-    // for example, to return only field 'configuration.grant', you may set
-    // $fields: 'configuration.grant'
-    // you can also set multiple fields 
-    // $fields: [ 'configuration', 'platform' ]
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    entity: {
-      // list of key-value attributes (without passwords or token)
-    }
-  }
-}
-```
-
-### 1.4 Get time series data for a specific entity
-
-**mailbox:** `:request/get_data_series`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params:{
-    id, // id of account to get
-
-    // you may optionally specify the time range
-    time: [start, stop] 
-    // or may be
-    time: [start] 
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.{no_data,*}}",
-    data: {
-      field1: [
-        {value: 1, time: 3232323},
-        {value: 2, time: 3232324},
-      ],
-      field2: [
-      ]
-    }
-  }
-}
-```
-
-### 1.5 Remove an entity
-
-**mailbox:** `:request/remove`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
-    id, // id of account to update
-    // any key-value else
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}"
-  }
-}
-```
-
-### 1.6 List entities
-List all entities in our system
-
-**mailbox:** `:request/list`
-
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
-    // You may query via id patterns
-    id: 'pattern'
-    //id : 'device/*' -> for all devices
-    // id: 'services/*' -> for all services
-    // id: '*' -> for all
-    // if no id pattern specified, by default pattern = '*'
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
-
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    entities:[
-      // list of entities's id
-    ]
-  }
-}
-```
+If there's  an aktor running with the same id , returns `status.failure.already_running`
 
 
 **note**
-- `service/#` can not be deleted via this request
-- any grants associated with the entity will be deleted as well.
+- Aktors invoking this request will be marked as parents of the newly started aktor (via field `_parent`)
 
-### 2. Health requests
+##### 3.1.2. Stop an aktor
 
-This requests are dedicated for service monitor
+Stop an aktor but not remove it from the environ.
 
-Only `service/monitor` is allowed to interact with these requests
+**endpoint** `:request/aktor_stop`
 
-#### 2.1 Get all health records of entities
+**message**:
 
-**mailbox:** `:request/health/get_all`
-
-**message:**
-
-```javascript
+```js
 {
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
+  header, // added by our custom broker
+  params: { // optional
+    id, // id of the aktor to stop
   }
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+If no id is provided, one from the header will be used.
+
+Environ will fulfill the request by:
+- Ask the aktor gracefully by invoking `:request/stop` (with a `forward timeout`)
+- Ask PM2 to `delete` the associated process (if have, for non-NodeJs aktor) after a specific timeout (2000 ms)
+
+**response**
 
 ```js
 {
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
+  header,
+  request,
   response: {
-    status: "status.{success, failure.*}",
-    health: [ // list of available records
+    status: 'status.{failure, success}'
+  }
+}
+```
+
+Only parent aktors, Environ, the aktor itself may terminate a specific aktor.
+
+If invokers are not authorized, returns `status.failure.unauthorized`
+
+If no such aktor's running, returns `status.failure.no_such_aktor`
+
+##### 3.1.3. Remove an aktor
+
+Remove data about an aktor from the environ.
+Remember you must stop it before invoking this request
+
+**endpoint** `:request/aktor_destroy`
+
+**message**:
+
+```js
+{
+  header, // added by our custom broker
+  params: { // optional
+    id // id of the aktor to remove
+  }
+}
+```
+
+If no id is provided, one from the header will be used.
+
+**response**
+
+```js
+{
+  header,
+  request,
+  response: {
+    status: 'status.{failure, success}'
+  }
+}
+```
+
+Only parent aktors, Environ, the aktor itself may terminate a specific aktor.
+
+If invokers are not authorized, returns `status.failure.unauthorized`
+
+If there's no such aktor, returns `status.failure.no_such_aktor`
+
+##### 3.1.4 Get information about hosted aktors
+
+**endpoint** `:request/aktor_get`
+
+**message**:
+
+```js
+{
+  header, // added by our custom broker
+  params: { // blank params
+    id // optional. If there's no id specified, all hosted aktors will be returned
+  }
+}
+```
+
+**response**
+
+```js
+{
+  header,
+  request,
+  response: {
+    status: 'status.{failure, success}',
+    aktors: [
       {
-        id, 
-        timestamp,
-        status
-      }
+        script,
+        id,
+        token, // --> must be dropped
+        faulty,
+        status,
+        _container // string, name of the hosting container
+        ...
+      },
+      // other aktors
     ]
   }
 }
 ```
 
-#### 2.2 Update health records for an entity
+##### 3.1.5 Stop the environ
 
-**mailbox:** `:request/health/update`
+**endpoint** `:request/stop`
 
-**message:**
-
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
-    id, 
-    // any key-value else
-    // supposed to be: status, timestamp
-    // status = status.health.{unknown, alive, dead }
-  }
-}
-```
-
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**message**:
 
 ```js
 {
-  header: { // added by our broker
-    from, // sender's guid
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}"
+  header, // added by our custom broker
+  params: { // blank params
   }
 }
 ```
 
+**response**
+
+```js
+{
+  header,
+  request,
+  response: {
+    status: 'status.{failure, success}'
+  }
+}
+```
+
+Only Environ or System may invoke these requests.
+
+Returns `failure` if Requesters are NOT authorized to invoke such requests.
+
+Environ will stop by:
+- Ask hosted aktors to stop gracefully (timeout)
+- Response to requesters
+- Release resources (callbacks, ports...)
+- Exit the running process
+
+##### 3.1.6 Get configurations for Environ
+
+**endpoint**  `:request/environ_get`
+
+**message**:
+
+```js
+{
+  header, // added by our custom broker
+  params: { // blank params
+  }
+}
+```
+
+**response**
+
+```js
+{
+  header,
+  request,
+  response: {
+    status: 'status.{failure, success}',
+    configuration: {
+        maxRestarts // blah blah blah
+    }
+  }
+}
+```
+
+**security**
+Only `system` or `service/environ` can invoke this requests
+
+##### 3.1.7 Set configurations for Environ
+
+**endpoint** `:request/environ_set`
+
+**message**
+
+```js
+{
+  header, // added by our custom broker
+  params: { // params to set
+    //  following fields are supported
+    //   "container": {
+    //       "instances": 3
+    //   },
+    //   "maxRestarts": 3,
+    //   "clean": true,
+    //   "timeout": 10000,
+    //   "timeoutRatio": 0.8      
+  }
+}
+```
+
+To unset a key, just set its associated value to null
+For example:
+
+```js
+{
+    header,
+    params: {
+        clean: null
+    }
+}
+``
+
+**response**
+
+```js
+{
+  header,
+  request,
+  response: {
+    status: 'status.{failure, success}',
+    configuration // newly updated configuration
+  }
+}
+```
+
+**security**
+Only `system` or `service/environ` can invoke this requests
+
+
+#### 3.2. Events
+
+##### 3.2.1 Faulty
+
+This kind of events will be emitted if there's any `faulty` aktor. Faulty ones will not be hosted in the container and be deleted.
+
+If the aktor's fixed, you must invoke `:request/aktor_start` again to start it over.
+
+**endpoint** `:event/aktor_faulty`
+
+**message**:
+
+```js
+{
+  header, // added by our custom broker
+  params: {
+    id, // id of the faulty aktor
+  },
+}
+```
+
+##### 3.2.2 Status
+
+Just like other CommonAktor

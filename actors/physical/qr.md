@@ -4,8 +4,8 @@ QR
 
 The actor's local UID is: `service/qr`
 
-## Mailboxes
-The actor uses following mailboxes
+## Endpoints
+The actor uses following endpointes
 
 ### 1. Requests
 
@@ -19,7 +19,7 @@ This service is an actuator and generate no request to other actors.
 
 #### 3.1 Update qr content
 
-**mailbox:** `:event/qr_update`
+**endpoint:** `:event/qr_update`
 
 **message:** messages should conform the format
 ```js
@@ -35,7 +35,7 @@ This service is an actuator and generate no request to other actors.
 
 #### 3.2 Update service info
 
-**mailbox:** `:event/info`
+**endpoint:** `:event/info`
 
 **message:** messages should conform the format
 ```js

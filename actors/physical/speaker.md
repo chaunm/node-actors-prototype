@@ -9,14 +9,14 @@ This service is used to play an mp3 file.
 # UID
 The actor's local UID is: `service/speaker`
 
-# Mailboxes
-The actor uses following mailboxes:
+# Endpoints
+The actor uses following endpointes:
 
 ## 1. Requests
 For serving requests from other actors
 ### 1.1 Play
 
-**mailbox:** `:request/play`
+**endpoint:** `:request/play`
 
 **message:**
 ```javascript
@@ -35,7 +35,7 @@ For serving requests from other actors
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 ```js
 {
   header: { // added by our broker
@@ -53,7 +53,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.2 Stop playing
 
-**mailbox:** `:request/stop_playing`
+**endpoint:** `:request/stop_playing`
 
 **message:**
 ```javascript
@@ -70,7 +70,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` endpoint:
 ```js
 {
 	from, // znp's guid, added by Message Broker automatically

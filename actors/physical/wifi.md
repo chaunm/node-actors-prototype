@@ -9,14 +9,14 @@ This actor works with Wifi devices. It must conform `Actor Commons` (see more in
 # UID
 The actor's local UID is: `service/wifi`
 
-# Mailboxes
-The actor uses following mailboxes:
+# Endpoints
+The actor uses following endpointes:
 
 ## 1. Requests
 For serving requests from other actors
 ### 1.1 Broadcast
 
-**mailbox:** `:request/broadcast`
+**endpoint:** `:request/broadcast`
 
 **message:**
 ```javascript
@@ -35,7 +35,7 @@ For serving requests from other actors
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 ```js
 {
   header: { // added by our broker
@@ -53,7 +53,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.2 Connect
 
-**mailbox:** `:request/connect`
+**endpoint:** `:request/connect`
 
 **message:**
 ```javascript
@@ -72,7 +72,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` endpoint:
 ```js
 {
 	from, // znp's guid, added by Message Broker automatically
@@ -90,7 +90,7 @@ The timeout must be set to > 3 min
 ### 1.3 Hi
 Get information about the Wi-Fi network
 
-**mailbox:** `:request/hi`
+**endpoint:** `:request/hi`
 
 **message:**
 ```javascript
@@ -108,7 +108,7 @@ Get information about the Wi-Fi network
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` endpoint:
 ```js
 {
   from, // znp's guid, added by Message Broker automatically
@@ -128,9 +128,9 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 ```
 
 ## 2. Response
-This mailbox contains response from other actors
+This endpoint contains response from other actors
 
-**mailbox:** `response`
+**endpoint:** `response`
 
 **message:**  messages should conform the format:
 ```js
@@ -152,7 +152,7 @@ This mailbox contains response from other actors
 ## 3. Events
 ### 3.1 Connected
 
-**mailbox:** `:event/connected`
+**endpoint:** `:event/connected`
 
 **message**: messages should conform the format
 ```js
@@ -171,7 +171,7 @@ This mailbox contains response from other actors
 
 ### 3.2 Disconnected
 
-**mailbox:** `:event/disconnected`
+**endpoint:** `:event/disconnected`
 
 **message**: messages should conform the format
 ```js

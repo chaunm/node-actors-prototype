@@ -9,14 +9,14 @@ This actor works with camera devices. It must conform `Actor Commons` (see more 
 # UID
 The actor's local UID is: `service/camera`
 
-# Mailboxes
-The actor uses following mailboxes:
+# Endpoints
+The actor uses following endpointes:
 
 ## 1. Requests
 For serving requests from other actors
 ### 1.1 start_streaming
 
-**mailbox:** `:request/start_streaming`
+**endpoint:** `:request/start_streaming`
 
 **message:**
 ```javascript
@@ -34,7 +34,7 @@ For serving requests from other actors
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 ```js
 {
   header: { // added by our broker
@@ -52,7 +52,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.2 stop_streaming
 
-**mailbox:** `:request/stop_streaming`
+**endpoint:** `:request/stop_streaming`
 
 **message:**
 ```javascript
@@ -69,7 +69,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` endpoint:
 ```js
 {
 	from, // znp's guid, added by Message Broker automatically
@@ -82,7 +82,7 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 
 ### 1.3 Set quality
 
-**mailbox:** `:request/set_quality`
+**endpoint:** `:request/set_quality`
 
 **message:**
 ```javascript
@@ -100,7 +100,7 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` endpoint:
 ```js
 {
   from, // znp's guid, added by Message Broker automatically
@@ -112,9 +112,9 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 ```
 
 ## 2. Response
-This mailbox contains response from other actors
+This endpoint contains response from other actors
 
-**mailbox:** `response`
+**endpoint:** `response`
 
 **message:**  messages should conform the format:
 ```js
@@ -136,7 +136,7 @@ This mailbox contains response from other actors
 ## 3. Events
 ### 3.1 Camera started
 
-**mailbox:** `:event/camera_started`
+**endpoint:** `:event/camera_started`
 
 **message**: messages should conform the format
 ```js
@@ -154,7 +154,7 @@ This mailbox contains response from other actors
 
 ### 3.2 Camera stopped
 
-**mailbox:** `:event/camera_stopped`
+**endpoint:** `:event/camera_stopped`
 
 **message**: messages should conform the format
 ```js

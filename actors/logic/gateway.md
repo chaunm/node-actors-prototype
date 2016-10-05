@@ -96,14 +96,14 @@ It has 2 interfaces:
 
 Actually the 2 interfaces are implemented using Actors with the same:
 - IDs (tokens may be different from each other)
-- Handlers for same mailboxes
+- Handlers for same endpointes
 
 So we may have:
 
 ```text
-handler(mailbox='gateway/id/:request/data', interface='local')
+handler(endpoint='gateway/id/:request/data', interface='local')
 =
-handler(mailbox='gateway/id/:request/data', interface='cloud')
+handler(endpoint='gateway/id/:request/data', interface='cloud')
 ```
 
 It must conform `Actor Commons` (see more in `../actor-system.md`)
@@ -111,13 +111,13 @@ It must conform `Actor Commons` (see more in `../actor-system.md`)
 # A. ID
 The actor's local ID is: `service/bonjour`
 
-# B. Mailboxes
-The service uses following mailboxes
+# B. Endpoints
+The service uses following endpointes
 
 ## 1. Requests
 ### 1.1 Get information about the system
 
-**mailbox:** `request/hi`
+**endpoint:** `request/hi`
 
 **message:**
 
@@ -135,7 +135,7 @@ The service uses following mailboxes
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -185,7 +185,7 @@ A success response is just to let `Anonymous` know that: the params is ok.
 
 The requester then should re-connect back to the home network wifi, discovering the presence of gateway (in 3 minutes timeout )
 
-**mailbox:** `:request/activate`
+**endpoint:** `:request/activate`
 
 **message:**
 
@@ -214,7 +214,7 @@ Ask `service/gateway` to broadcast a Wi-Fi network, accepting Activation request
 
 Only accepts requests from `system` if the internal state is not `state.initializing`
 
-**mailbox:** `:request/init`
+**endpoint:** `:request/init`
 
 **message:**
 
@@ -233,7 +233,7 @@ Only accepts requests from `system` if the internal state is not `state.initiali
 
 **response**
 
-Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {

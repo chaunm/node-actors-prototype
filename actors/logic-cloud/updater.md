@@ -10,7 +10,7 @@ The ID is: `cloud/updater`
 
 ### 2.1 Get information about the latest available update
 
-**mailbox:** `:request/probe`
+**endpoint:** `:request/probe`
 
 **message:**
 
@@ -35,7 +35,7 @@ The ID is: `cloud/updater`
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -78,7 +78,7 @@ The download processes have 2 steps:
 
 #### 2.2.1 Init
 
-**mailbox:** `:request/download/init`
+**endpoint:** `:request/download/init`
 
 **message:**
 
@@ -98,7 +98,7 @@ The download processes have 2 steps:
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -116,7 +116,7 @@ The download processes have 2 steps:
 ```
 
 #### 2.2.2 Get
-**mailbox:** `:request/download/get`
+**endpoint:** `:request/download/get`
 
 **message:**
 
@@ -136,7 +136,7 @@ The download processes have 2 steps:
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {

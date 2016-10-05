@@ -82,15 +82,15 @@ An example record may be:
 # A. ID
 The actor's local UID is: `system`
 
-# B. Mailboxes
-The actor uses following mailboxes
+# B. Endpoints
+The actor uses following endpointes
 
 ## 1. Requests
 ### 1.1 Finalize
 
 Called by `service/bonjour` to finalize the initialization 
 
-**mailbox:** `:request/finalize`
+**endpoint:** `:request/finalize`
 
 **message:**
 
@@ -115,7 +115,7 @@ Called by `service/bonjour` to finalize the initialization
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -136,7 +136,7 @@ Called by `service/bonjour` to finalize the initialization
 
 Get information about `system`. No restriction on ACL.
 
-**mailbox:** `:request/hi`
+**endpoint:** `:request/hi`
 
 **message:**
 
@@ -153,7 +153,7 @@ Get information about `system`. No restriction on ACL.
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -211,7 +211,7 @@ Reset the whole system by:
 - removing `user/.*` in `mqtt_entity`
 - removing `system.owner`, `time.initialized`
 
-**mailbox:** `:request/reset`
+**endpoint:** `:request/reset`
 
 **message:**
 
@@ -228,7 +228,7 @@ Reset the whole system by:
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -251,7 +251,7 @@ Only accepts requests from the owner (or a system service)
 
 ## 3. Event
 ### 3.1 xxx
-**mailbox:** `:event/xxx`
+**endpoint:** `:event/xxx`
 
 **message:** This is a retained message
 

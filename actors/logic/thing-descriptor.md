@@ -22,11 +22,11 @@ Descriptors are means for representing things to the outside world, letting othe
                     id: {
                         type: 'string',
                         description: 'Id of the thing. It should be unique.'
-                    }
+                    },
                     class:{
                         type: 'string',
                         description: 'class of the thing. For example: class.device.sensor.motion. Things in the same class behave in the same way.'
-                    },
+                    }
                 },
                 required: ['id', 'class']
             },
@@ -39,12 +39,6 @@ Descriptors are means for representing things to the outside world, letting othe
 
                         },
                         _updatedAt: 3000
-                    },
-                    key2: {
-                        ref: {
-                            type: 'string',
-                            description: 'It can be a reference to the global context key. Schema must be `world://<selector>`, in which `<selector>` is in lodash-supported format'
-                        }
                     }
                 }
             },
@@ -66,6 +60,19 @@ Descriptors are means for representing things to the outside world, letting othe
                                 description: 'Unix time at which the value is set'
                             }
                         }
+                    },
+                    signal: {
+                        type: 'object',
+                        properties: {
+                            value: {
+                                type: 'boolean',
+                                description: 'True means signal is strong enough to work. Otherwise, set to false.'
+                            },
+                            _updatedAt: {
+                                type: 'number',
+                                description: 'Unix time at which the value is set'
+                            }
+                        }
                     }
                 }
             },
@@ -78,19 +85,28 @@ Descriptors are means for representing things to the outside world, letting othe
                     eventMotionDetected: {
                         type: 'object',
                         properties: {
+                            origin : {
+                                type: 'object',
+                                description: 'origin information about the source. Only id is required. Environ will update with field `class`',
+                                properties: {
+                                    id: {
+                                        type: 'string'
+                                    }
+                                },
+                                required: ['id']
+                            },
+
                             type: {
-                                constant: 'event.device.sensor.motion.detected'
+                                constant: 'event/device/sensor/motion/detected'
                             },                            
-                            params:{
+
+                            data: {
                                 type: 'object',
                                 description: 'Collected data. This will be update into the state'
-                            },
-<!--                             origin : { // Watson will inject this field for every emitted events
-                                type: 'object',
-                                description: 'Meta information about the source: id, class'
-                            } -->
+                            }
+
                         },
-                        required: ['origin'] // params is optional if you dont want to update any information into the state.
+                        required: ['origin', 'type']
                     }
                 }
             },
@@ -102,23 +118,18 @@ Descriptors are means for representing things to the outside world, letting othe
                     actionAddDevice: {
                         type: 'object',
                         properties: {
-                            type: {
-                                constant: 'action.service.zigbee.add_device'
+                            type: { 
+                                constant: 'action/service/zigbee/add_device'
                             },
-                            id: {
-                                type: 'string',
-                                description: 'Id of device to interact with'
-                            },
-                            endpoint: {
-                                type: 'string',
-                                description: 'Relative endpoint to serve requests. If no endpoint is specified, it will be set to the parent id'
-                            },
+                            meta: {
+
+                            }, // optional for zigbee actuators sharing same endpoints
                             params: {
                                 type: 'object',
-                                description: 'Parameters for the action to start'
-                            }
+                                description: 'Arguments for the action'
+                            }                             
                         },
-                        required: ['id', 'type']
+                        required: ['type']
                     }
                 }
             },
@@ -127,7 +138,7 @@ Descriptors are means for representing things to the outside world, letting othe
                 type: 'array'
                 description: ` Array of properties to hide from the query engine
                     [ 
-                        'meta',
+                        'origin',
                         'state',
                         'event.eventMotionDetected',
                         'action.actionDismiss'

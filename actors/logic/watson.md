@@ -17,7 +17,7 @@ This actor acts as the central piece of our system:
 
 Register a thing with Watson
 
-**mailbox:** `:request/thing_register`
+**endpoint:** `:request/thing_register`
 
 **message:**
 
@@ -54,7 +54,7 @@ params = {
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -76,7 +76,7 @@ params = {
 
 Unregister a registered thing
 
-**mailbox:** `:request/thing_unregister`
+**endpoint:** `:request/thing_unregister`
 
 **message:**
 
@@ -92,7 +92,7 @@ Unregister a registered thing
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -113,7 +113,7 @@ Unregister a registered thing
 
 Emit an event to Watson's event stream (if it's not hidden)
 
-**mailbox:** `:request/thing_talk`
+**endpoint:** `:request/thing_talk`
 
 **message:**
 
@@ -161,7 +161,7 @@ Watson will then emit the event into the stream after injecting field `origin` i
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -190,7 +190,7 @@ Two operations are supported, including `set`, `unset`, `free`.
 
 If `free` is used, it will supersede `set`, `unset`, releasing the context
 
-**mailbox:** `:request/thing_context_update`
+**endpoint:** `:request/thing_context_update`
 
 **message:**
 
@@ -226,7 +226,7 @@ If `free` is used, it will supersede `set`, `unset`, releasing the context
 
 Watson will use the `params` to update the thing's context.
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -243,7 +243,7 @@ Watson will use the `params` to update the thing's context.
 
 Fetch context of  a specific thing
 
-**mailbox:** `:request/thing_context_fetch`
+**endpoint:** `:request/thing_context_fetch`
 
 **message:**
 
@@ -258,7 +258,7 @@ Fetch context of  a specific thing
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -275,7 +275,7 @@ Fetch context of  a specific thing
 
 Query information about things
 
-**mailbox:** `:request/thing_query`
+**endpoint:** `:request/thing_query`
 
 **message:**
 
@@ -288,7 +288,7 @@ Query information about things
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -308,7 +308,7 @@ Query information about things
 
 Ask a specific device to do something
 
-**mailbox:** `:request/thing_act`
+**endpoint:** `:request/thing_act`
 
 **message:**
 
@@ -325,7 +325,7 @@ Ask a specific device to do something
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -351,7 +351,7 @@ Two operations are supported, including `set`, `unset`, `free`.
 
 If `free` is used, it will supersede `set`, `unset`, releasing the context
 
-**mailbox:** `:request/world_context_update`
+**endpoint:** `:request/world_context_update`
 
 **message:**
 
@@ -389,7 +389,7 @@ If `free` is used, it will supersede `set`, `unset`, releasing the context
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -406,7 +406,7 @@ If `free` is used, it will supersede `set`, `unset`, releasing the context
 
 Fetch context of  a specific thing
 
-**mailbox:** `:request/world_context_fetch`
+**endpoint:** `:request/world_context_fetch`
 
 **message:**
 
@@ -421,7 +421,7 @@ Fetch context of  a specific thing
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -438,7 +438,7 @@ Fetch context of  a specific thing
 
 List all knowledgable things
 
-**mailbox:** `:request/world_list`
+**endpoint:** `:request/world_list`
 
 **message:**
 
@@ -451,7 +451,7 @@ List all knowledgable things
 ```
 
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {

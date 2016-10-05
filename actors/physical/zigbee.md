@@ -7,17 +7,18 @@ ZNP Service
 This actor works with ZNP devices. It must conform `Actor Commons` (see more in `../actor-system.md`)
 
 # UID
-The actor's local UID is: `service/zigbee`
+The actor's local UID is: `service/zigbee_driver`
 
-# Mailboxes
+# Endpoints
 
-The actor uses following mailboxes
+The actor uses following endpoints
 
-## 1. Requests
+## 1. Action
+
 For serving requests from other actors
 ### 1.1 Add devices
 
-**mailbox:** `:request/add_devices`
+**endpoint:** `action/service/zigbee_driver/add_devices`
 
 **message:**
 ```javascript
@@ -28,6 +29,8 @@ For serving requests from other actors
     timestamp
   },
 
+  type: 'action/service/zigbee_driver/add_devices',
+
   params: {
     duration: <int, time in seconds>
   }
@@ -35,7 +38,7 @@ For serving requests from other actors
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 ```js
 {
   header: { // added by our broker
@@ -43,6 +46,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'response',
   request, // the original request here
   response: {
     status: "status.{success, failure.*}"
@@ -52,7 +56,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.2 Remove devices
 
-**mailbox:** `:request/remove_device`
+**endpoint:** `action/service/zigbee_driver/remove_device`
 
 **message:**
 ```javascript
@@ -63,6 +67,8 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     timestamp
   },
 
+  type: 'action/service/zigbee_driver/remove_device',
+
   params :{
     deviceId: <string>
   }
@@ -70,7 +76,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 ```js
 {
   header: { // added by our broker
@@ -78,6 +84,8 @@ Upon finishing these requests, it should send a response to the sender's 'respon
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+
+  type: 'response',
 
   request, // the original request here
   response: {
@@ -87,35 +95,13 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 }
 ```
 
-## 2. Response
-This mailbox contains response from other actors
-
-**mailbox:** `:response`
-
-**message:**  messages should conform the format:
-```js
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-    // any key-value
-  }
-}
-```
-
-## 3. Events
-### 3.1 New device added
+## 2. Events
+### 2.1 New device added
 
 This event is generated when an a new device is added to network.
 In the params sector, beside macId information is all the endpoint information come in an array.
 
-**mailbox:** `:event/device_added`
+**endpoint:** `event/service/zigbee_driver/device_added`
 
 **message**: messages should conform the format
 ```js
@@ -125,17 +111,18 @@ In the params sector, beside macId information is all the endpoint information c
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/device_added',
   params:{
     macId: <mac Id of the device>,
     protocol: "zigbee",
     endpoints: < array of endpoint information
-    [ 
+    [
       //array of endpoint(s) information
       {
       endpoint,
       // class.device.sensor.{motion, humidity, door, fire}, class.device.keyfob.{panic, remote}
       class,
-     
+
       // any key-value else
       }
       ...
@@ -143,12 +130,12 @@ In the params sector, beside macId information is all the endpoint information c
 }
 ```
 
-### 3.2 New endpoint of device is added
+### 2.2 New endpoint of device is added
 
-This event is generated when an endponit of an existing device is added. Normally a Xiaomi's device does not support
+This event is generated when an endpoint of an existing device is added. Normally a Xiaomi's device does not support
 getting information when pairing so that endpoint of that device will be added later when there is data updated from device.
 
-**mailbox:** `:event/endpoint_added`
+**endpoint:** `event/service/zigbee_driver/endpoint_added`
 
 **message**: messages should conform the format
 ```js
@@ -158,6 +145,7 @@ getting information when pairing so that endpoint of that device will be added l
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/endpoint_added',  
   params:{
     macId,
     endpoint,
@@ -169,9 +157,9 @@ getting information when pairing so that endpoint of that device will be added l
 }
 ```
 
-### 3.3 Device is removed
+### 2.3 Device is removed
 
-**mailbox:** `:event/device_removed`
+**endpoint:** `event/service/zigbee_driver/device_removed`
 
 **message**: messages should conform the format
 ```js
@@ -181,15 +169,16 @@ getting information when pairing so that endpoint of that device will be added l
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/device_removed',    
   params: {
     macId
   }
 }
 ```
 
-### 3.4 Device's error
+### 2.4 Device's error
 
-**mailbox:** `:event/device_error`
+**endpoint:** `event/service/zigbee_driver/device_error`
 
 **message**: messages should conform the format
 ```js
@@ -199,6 +188,7 @@ getting information when pairing so that endpoint of that device will be added l
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/device_error',      
   params: {
     macId,
     protocol: "zigbee",
@@ -208,16 +198,16 @@ getting information when pairing so that endpoint of that device will be added l
 
 ```
 
-### 3.5 Device's signal strength
+### 2.5 Device's signal strength
 
 This event is generated when system get a message from devices update link quality of those devices.
 The value may have value of:
 
   0 - signal is weak
-  
+
   1 - signal is fair enough
-  
-**mailbox:** `:event/device_signal`
+
+**endpoint:** `event/service/zigbee_driver/device_signal`
 
 **message**: messages should conform the format
 ```js
@@ -227,6 +217,7 @@ The value may have value of:
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/device_signal',      
   params: {
     macId,
     protocol: "zigbee",
@@ -235,9 +226,9 @@ The value may have value of:
 }
 ```
 
-### 3.6 Device is offline
+### 2.6 Device is offline
 
-**mailbox:** `:event/device_offline`
+**endpoint:** `event/service/zigbee_driver/device_offline`
 
 **message**: messages should conform the format
 ```js
@@ -247,6 +238,7 @@ The value may have value of:
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/device_offline',        
   params: {
     macId,
     protocol: "zigbee"
@@ -254,9 +246,9 @@ The value may have value of:
 }
 ```
 
-### 3.7 Device is online
+### 2.7 Device is online
 
-**mailbox:** `:event/device_online`
+**endpoint:** `event/service/zigbee_driver/device_online`
 
 **message**: messages should conform the format
 ```js
@@ -266,6 +258,7 @@ The value may have value of:
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/device_online',        
   params: {
     macId,
     protocol: "zigbee"
@@ -273,9 +266,9 @@ The value may have value of:
 }
 ```
 
-### 3.8 Device's data
+### 2.8 Device's data
 
-**mailbox:** `:event/device_data`
+**endpoint:** `event/service/zigbee_driver/device_data`
 
 **message**: messages should conform the format
 
@@ -286,6 +279,7 @@ The value may have value of:
     id, // generated & maintained by the sender (for callbacks)
     timestamp
   },
+  type: 'event/service/zigbee_driver/device_data',          
   params: {
     macId,
     endpoint,

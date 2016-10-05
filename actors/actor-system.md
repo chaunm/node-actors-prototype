@@ -1,233 +1,150 @@
-Actor System
+Aktor v2.0
 ===============
 
-## 1. Actors
+## 1. Aktors
+
 ### 1.1 Overview
-Actors are programming concepts to model entities communicating via messages.
+
+Aktors are programming concepts to model entities communicating via messages.
 + Can be implemented in any programming language
-+ Have their own mailboxes which are authorized topics on a message broker.
-+ Can be featured by a uid (locally or globally)
++ Have their own endpoints which are authorized topics on a message broker.
++ Can be featured via an ID (locally or globally)
 
-### 1.2 Mailboxes
-A mailbox (a topic) can be configured to subscribe or publish to a specific set of actors.
-+ Each mailbox has its own URIs
-+ URIs can be organized into APIs. For example `<uid>/:request/add_device`
+This specification is not fully compatible with Aktor v1.0
 
-#### 1.2.1 Owned mailboxes
-Mailbox ownership can be defined as: if an actor is defined a uid 'A', then any mailbox `A/#` will be considered to be owned by the actor.
+### 1.2 Endpoints
+An endpoint is an MQTT topic can be configured to subscribe or publish messages
 
-An actor owns 3 kind of mailboxes which are:
+Endpoints can be organized into APIs. For example `action/service/zigbee/add_device`
 
-**Request mailboxes:**
-+ URIs: `<uid>/:request/#`
-+ to store messages asking the actor do something
-+ Only authorized actors can publish messages to this mailboxes
-+ Only the owning actor can subscribe to
+An aktor works with 3 kinds of endpoints which are:
 
-**Response mailboxes**
-+ URIs: `<uid>/:response` (no sub-topic)
-+ Store response messages from other actors upon request messages.
-+ Each response messages must have `:request` fields to refer back to associated `:request messages`
+**Primary endpoints**
 
-**Event mailboxes:**
-+ URIs: `<uid>/:event/#`
-+ to store events emitted by the actor
-+ Only the owning actor can publish to
-+ Only authorized actors can subscribe to
+A certain aktor has a `primary endpoint` named by its ID. For example, aktor `service/zigbee` will have the primary endpoint of `service/zigbee`
 
-#### 1.2.2 Interactions
-if properly configured, actors can:
-- Subscribe to their own `:request` & `:response` mailboxes
-- Publish messages to their own `:event` mailboxes
-- Publish messages to `:request` & `:response` mailboxes of other actors
+This endpoints act a central point for processing `typed messages` ( see more in section `1.3 Typed messages` )
 
-### 1.3 Messages
-Interchanged messages are in JSON format.
-Broker will intercept such messages, appending `from` fields:
+**Action endpoints**
 
-**Example 1: Request & Response messages**
+Action endpoints are located at `action/#`. This endpoints is used by aktors to provide services to others
 
-A requests B to add_device and B responses. Let's assume that A is authorized
+**Event endpoints**
 
-*Step 1: A publishes a request message to B-uid/:request/add_device*
+Event endpoints have the form of `event/#`. This endpoints is used by aktors to notify others about their states.
 
-```javascript
-{
-	header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-	params
-}
-```
+### 1.3 Typed messages
 
-*Step 2: B executes the request, replying to A-uid/:response*
+Messages interchanged between aktors are JSON-based ones.
 
-```javascript
-{
-	header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-	request, // original request message
-	response // key-value pairs
-}
-```
+Our broker will intercept such messages, appending field `header`
 
-**Example 2: Events**
+Messages are typed. There are 3 kinds of messages:
 
-Actor Wifi can emit `connected` events to `:event/connected`:
+**action**
 
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-	params // any 	
-}
-```
-
-## 2. Actor Commons
-
-This section defines a common interface about what Actors must conform in our Actor System
-
-### 2.1  General
-- External actors must securely maintain their IDs & tokens (their credentials) which are used to connect to our brokers
-- Internal actors must securely maintain their credentials if provided. If they're provided with new credentials during activation period, they must use it.
+Every messages got from endpoints `action/#` will be stuffed with field `type` = `action/#`
 
 ```js
-// activation period: time at which the actor is activated by System
-// may be via command
-// $ ./dummy_actor --id <provided id> --token <provided token>
-
-// may be via programming language (nodejs)
-var DummyActor = new Actor({id, token});
-```
-
-### 2.2 Response
-Any response must contain the original request. For example:
-
-```javascript
 {
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-	request, // original request message
-	response // key-value pairs
+  header, // added by brokers
+  type: 'action/#', // added by brokers if not
+  params: { // any parameters for actions
+
+  }
 }
 ```
 
-### 2.3 Requests
-- Messages containing parameters passed to requests must have the format:
+**event**
+
+Every messages got from endpoints `event/#` (as a subscription result) will be stuffed with field `type` = `event/#`
+
 ```js
 {
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-
+  header, // added by brokers
+  type: 'event/#', // added by brokers if not
   params: {
-		// any key-value
-	}
-}
-```
 
-- Must response to special requests
-
-#### 2.3.1 Stop
-
-**Purpose** Safely stop any activities
-
-**mailbox** `:request/stop`
-
-**message:**
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
-    reason: "The reason why you want to stop the actor"
   }
 }
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
 
-```javascript
-{
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  request, // the original request here
-  response: {
-    status: "status.{success, failure.*}",
-  }
-}
-```
+Results of actions may be delivered back to the invoker via this kind of messages:
 
-### 2.4 Event
-Periodically emit status event via `:event/status` (every 5s)
-
-For example:
 ```js
 {
-  header: { // added by our broker
-    from, // sender's guid
-    id, // generated & maintained by the sender (for callbacks)
-    timestamp
-  },
-  params: {
-    status: "status.{online, offline}"
-  }
+  header,
+  type: 'response',
+  request, // the original request
+  response
 }
 ```
 
-## 3. Actor System
-Actor system contains 3 layers and boot in order
+#### 1.4 Interactions
 
-1. Core services: Primitive services
-- Validator: validate all components
-- LED controllers
-- Message broker: eMQTT
-- Database (mongodb)
-- ActorUp: activates all actors
+- Aktors can emit events (via its event endpoints). Others can listen
 
-2. Actors: executable programs in any programming language
+```js
+aktor.listen('event/service/zigbee/device_added', options, function(message){
 
-**System Service Actor**
-- Initializer: initialize devices in the first time
-- Updater: check for any update
-- Monitor: monitor actor/messages statuses
-- Broker: configure brokers (acl, authen)
-- Database: database service
-- Bridge: connect to the cloud (if feasible)
-- Analytics
-- Logger
-- Housekeeper
+})
+```
 
-**Driver service actor**
-- znp
-- wifi
-- led
-- speaker
+With `options` you can specify `timeout` to wait for incoming messages.
 
+- Aktors can `ask` other aktors to do something, and wait for results back
 
-**Device actors**: A hardware abstraction layer
-- Abstract device actors
-- Triggers
+```js
 
-**User actors**
-- Any registered & authorized users
+aktor.ask('action/service/zigbee/add_device', message, options, function(err, result){
+  // if there's no aktor serving at the endpoint, after a specific timeout
+  // the callback function will be invoked with `err` = `status.failure.timeout`
+})
+```
+
+With `options` you can specify `timeout` to wait for the result
+
+- Aktors can `tell` others to do something and don't care about the results
+
+```js
+aktor.tell('action/service/zigbee/add_device', message)
+aktor.tell('event/service/zigbee/device_added', message)
+```
+
+## 2. Things
+
+Things are aktors with [descriptors](./descriptor.md)
+
+```js
+descriptor = {
+  meta,
+  event,
+  action
+}
+```
+
+- Manifest itself by telling `event/service/world/manifest/<id>` with `status` = `status.{online, offline}`. If `status` = `status.online`, it optionally provide its descriptors:
+
+```js
+var message = {
+  type: 'event/service/world/manifest',
+  params: {
+    status: 'status.online',
+    descriptors: [
+      // array of descriptors
+    ]
+  }
+}
+
+thing.tell('event/service/world/manifest/id', message, callback)
+```
+
+- Register/unregister its instances by invoking `action/service/world/register`, `action/service/world/unregister`
+
+- Response to typed messages of `action/stop` (delivered directly to primary endpoints) by:
+  - checking for the invokers' authority
+  - releasing any resources allocated
+  - invoking `action/service/world/manifest` with `status` = `status.offline`
+  - terminating itself

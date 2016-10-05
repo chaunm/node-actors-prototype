@@ -9,14 +9,14 @@ This actor works with gsm devices. It must conform `Actor Commons` (see more in 
 # UID
 The actor's local UID is: `service/gsm`
 
-# Mailboxes
-The actor uses following mailboxes:
+# Endpoints
+The actor uses following endpointes:
 
 ## 1. Requests
 For serving requests from other actors
 ### 1.1 Send sms
 
-**mailbox:** `:request/send_sms`
+**endpoint:** `:request/send_sms`
 
 **message:**
 ```javascript
@@ -35,7 +35,7 @@ For serving requests from other actors
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 ```js
 {
   header: { // added by our broker
@@ -53,7 +53,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 
 ### 1.2 Make call
 
-**mailbox:** `:request/make_call`
+**endpoint:** `:request/make_call`
 
 **message:**
 ```javascript
@@ -71,7 +71,7 @@ Upon finishing these requests, it should send a response to the sender's 'respon
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` endpoint:
 ```js
 {
   header: { // added by our broker
@@ -90,7 +90,7 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 
 Get information about GSM interfaces
 
-**mailbox:** `:request/hi`
+**endpoint:** `:request/hi`
 
 **message:**
 ```javascript
@@ -106,7 +106,7 @@ Get information about GSM interfaces
 ```
 
 **response**
-Upon finishing these requests, it should send a response to the sender's `:response` mailbox:
+Upon finishing these requests, it should send a response to the sender's `:response` endpoint:
 ```js
 {
   header: { // added by our broker
@@ -127,9 +127,9 @@ Upon finishing these requests, it should send a response to the sender's `:respo
 ```
 
 ## 2. Response
-This mailbox contains response from other actors
+This endpoint contains response from other actors
 
-**mailbox:** `:response`
+**endpoint:** `:response`
 
 **message:**  messages should conform the format:
 ```js
@@ -151,7 +151,7 @@ This mailbox contains response from other actors
 ## 3. Events
 ### 3.1 SMS received
 
-**mailbox:** `:event/sms_received`
+**endpoint:** `:event/sms_received`
 
 **message**: messages should conform the format
 ```js
@@ -169,7 +169,7 @@ This mailbox contains response from other actors
 ```
 ### 3.2 SMS delivered
 
-**mailbox:** `:event/sms_delivered`
+**endpoint:** `:event/sms_delivered`
 
 **message**: messages should conform the format
 ```js
@@ -187,7 +187,7 @@ This mailbox contains response from other actors
 
 ### 3.3 Call received
 
-**mailbox:** `:event/call_received`
+**endpoint:** `:event/call_received`
 
 **message**: messages should conform the format
 ```js
@@ -206,7 +206,7 @@ This mailbox contains response from other actors
 ### 3.4 Gsm start
 This message is sent to tell system if the gsm device is properly started.
 
-**mailbox:** `:event/gsm_started`
+**endpoint:** `:event/gsm_started`
 
 **message**: messages should conform the format
 ```js
@@ -227,7 +227,7 @@ In case of there is any error occurs in the starting process, there will be an e
 ### 3.5 Gsm error
 This message is sent to inform if there is any error with the gsm devices
 
-**mailbox:** `:event/gsm_error`
+**endpoint:** `:event/gsm_error`
 
 **message**: messages should conform the format
 ```js
@@ -249,7 +249,7 @@ A command timeout event received means that communication between host and the g
 ### 3.6 Billing report
 This message is sent to inform the billing message received from operator
 
-**mailbox:** `:event/billing_report`
+**endpoint:** `:event/billing_report`
 
 **message**: messages should conform the format
 ```js
@@ -267,7 +267,7 @@ This message is sent to inform the billing message received from operator
 ### 3.7 Carrier report
 This message is sent to report about carrier and signal status
 
-**mailbox:** `:event/carrier_report`
+**endpoint:** `:event/carrier_report`
 
 **message**: messages should conform the format
 ```js

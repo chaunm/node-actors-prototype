@@ -4,14 +4,14 @@ POWER
 
 The actor's local UID is: `service/power`
 
-## Mailboxes
-The actor uses following mailboxes
+## Endpoints
+The actor uses following endpointes
 
 ### 1. Requests
 
 #### 1.1. Request/hi
 
-**mailbox:** `:request/hi`
+**endpoint:** `:request/hi`
 
 **request:**
 ```js
@@ -44,7 +44,7 @@ This service is an actuator and generate no request to other actors.
 
 #### 3.1 Blackout event
 
-**mailbox:** `:event/blackout`
+**endpoint:** `:event/blackout`
 
 **message:** messages should conform the format
 ```js
@@ -61,7 +61,7 @@ This service is an actuator and generate no request to other actors.
 
 #### 3.2 Power restored
 
-**mailbox:** `:event/restored`
+**endpoint:** `:event/restored`
 
 **message:** messages should conform the format
 ```js

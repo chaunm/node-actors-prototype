@@ -4,8 +4,8 @@ LED
 
 The actor's local UID is: `service/led`
 
-## Mailboxes
-The actor uses following mailboxes
+## Endpoints
+The actor uses following endpointes
 
 ### 1. Requests
 
@@ -13,7 +13,7 @@ For serving requests from other actors
 
 #### 1.1 Turn on led
 
-**mailbox:** `:request/turn_on`
+**endpoint:** `:request/turn_on`
 
 **message:**
 ```js
@@ -31,7 +31,7 @@ For serving requests from other actors
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 
 ```js
 {
@@ -49,7 +49,7 @@ For serving requests from other actors
 
 #### 1.2 Turn off led
 
-**mailbox:** `:request/turn_off`
+**endpoint:** `:request/turn_off`
 
 **message**
 ```js
@@ -64,7 +64,7 @@ For serving requests from other actors
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 
 ```js
 {
@@ -82,7 +82,7 @@ For serving requests from other actors
 
 #### 1.3 Blink led
 
-**mailbox:** `:request/blink`
+**endpoint:** `:request/blink`
 
 **message**
 
@@ -103,7 +103,7 @@ For serving requests from other actors
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's 'response' mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's 'response' endpoint:
 
 ```js
 {
@@ -127,7 +127,7 @@ This service is an actuator and generate no request to other actors.
 
 #### 3.1 State changed
 
-**mailbox:** `:event/state_changed`
+**endpoint:** `:event/state_changed`
 
 **message:** messages should conform the format
 ```js

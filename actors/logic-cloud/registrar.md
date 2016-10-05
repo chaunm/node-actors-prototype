@@ -15,7 +15,7 @@ The ID is: `cloud/registrar`
 
 Endpoint for in-house gateways to register themselves before being put into the market.
 
-**mailbox:** `:request/register`
+**endpoint:** `:request/register`
 
 **message:**
 
@@ -36,7 +36,7 @@ Endpoint for in-house gateways to register themselves before being put into the 
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -58,7 +58,7 @@ Endpoint for in-house gateways to register themselves before being put into the 
 
 ### 1.2 Update tokens
 
-**mailbox:** `:request/update/token`
+**endpoint:** `:request/update/token`
 
 **message:**
 
@@ -78,7 +78,7 @@ Endpoint for in-house gateways to register themselves before being put into the 
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
@@ -97,7 +97,7 @@ Endpoint for in-house gateways to register themselves before being put into the 
 
 Verify if an entity exists
 
-**mailbox:** `:request/verify`
+**endpoint:** `:request/verify`
 
 **message:**
 
@@ -118,7 +118,7 @@ Verify if an entity exists
 }
 ```
 
-**response** Upon finishing these requests, it should send a response to the sender's `/:response` mailbox:
+**response** Upon finishing these requests, it should send a response to the sender's `/:response` endpoint:
 
 ```js
 {
