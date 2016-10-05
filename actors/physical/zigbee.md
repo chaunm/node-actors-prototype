@@ -110,9 +110,45 @@ This mailbox contains response from other actors
 ```
 
 ## 3. Events
-### 3.1 New device is added
+### 3.1 New device added
+
+This event is generated when an a new device is added to network.
+In the params sector, beside macId information is all the endpoint information come in an array.
 
 **mailbox:** `:event/device_added`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params:{
+    macId: <mac Id of the device>,
+    protocol: "zigbee",
+    endpoints: < array of endpoint information
+    [ 
+      //array of endpoint(s) information
+      {
+      endpoint,
+      // class.device.sensor.{motion, humidity, door, fire}, class.device.keyfob.{panic, remote}
+      class,
+     
+      // any key-value else
+      }
+      ...
+  }
+}
+```
+
+### 3.2 New endpoint of device is added
+
+This event is generated when an endponit of an existing device is added. Normally a Xiaomi's device does not support
+getting information when pairing so that endpoint of that device will be added later when there is data updated from device.
+
+**mailbox:** `:event/endpoint_added`
 
 **message**: messages should conform the format
 ```js
@@ -133,7 +169,7 @@ This mailbox contains response from other actors
 }
 ```
 
-### 3.2 Device is removed
+### 3.3 Device is removed
 
 **mailbox:** `:event/device_removed`
 
@@ -151,7 +187,7 @@ This mailbox contains response from other actors
 }
 ```
 
-### 3.3 Device's error
+### 3.4 Device's error
 
 **mailbox:** `:event/device_error`
 
@@ -169,9 +205,37 @@ This mailbox contains response from other actors
     error: "error.device.code" // code describing the error (if any)  
   }
 }
+
 ```
 
-### 3.4 Device is offline
+### 3.5 Device's signal strength
+
+This event is generated when system get a message from devices update link quality of those devices.
+The value may have value of:
+
+  0 - signal is weak
+  
+  1 - signal is fair enough
+  
+**mailbox:** `:event/device_signal`
+
+**message**: messages should conform the format
+```js
+{
+  header: { // added by our broker
+    from, // sender's guid
+    id, // generated & maintained by the sender (for callbacks)
+    timestamp
+  },
+  params: {
+    macId,
+    protocol: "zigbee",
+    signal_strength: <0, 1>
+  }
+}
+```
+
+### 3.6 Device is offline
 
 **mailbox:** `:event/device_offline`
 
@@ -190,7 +254,7 @@ This mailbox contains response from other actors
 }
 ```
 
-### 3.5 Device is online
+### 3.7 Device is online
 
 **mailbox:** `:event/device_online`
 
@@ -209,7 +273,7 @@ This mailbox contains response from other actors
 }
 ```
 
-### 3.6 Device's data
+### 3.8 Device's data
 
 **mailbox:** `:event/device_data`
 
