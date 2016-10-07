@@ -29,6 +29,7 @@ This service is an actuator and generate no request to other actors.
     timestamp
   },
   params: {
+    status: <success/failure>
     content: {content of the QR code},
   }  
 ```
